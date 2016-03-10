@@ -27,18 +27,18 @@ public class FuzzyValueTest {
 	@Test
 	public void fuzzyValue_shouldNotThrowException_whenValueIs0() {
 		FuzzyValue value = new FuzzyValue(0.0);
-		assertEquals(value.get(), 0.0, PRECISION);
+		assertEquals(0.0, value.get(), PRECISION);
 	}
 	
 	@Test
 	public void fuzzyValue_shouldNotThrowException_whenValueIs1() {
 		FuzzyValue value = new FuzzyValue(1.0);
-		assertEquals(value.get(), 1.0, PRECISION);
+		assertEquals(1.0, value.get(), PRECISION);
 	}
 	
 	@Test
-	public void fuzzyValue_shouldNotThrowException_whenValueIs0Point5() {
+	public void fuzzyValue_shouldNotThrowException_whenValueIsDot5() {
 		FuzzyValue value = new FuzzyValue(0.5);
-		assertEquals(value.get(), 0.5, PRECISION);
+		assertEquals(0.5, value.get(), PRECISION);
 	}
 }
