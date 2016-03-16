@@ -72,11 +72,11 @@ public abstract class FuzzyRule implements FuzzySet {
 			if (functions.length == 0) {
 				return FuzzyValue.of(1);
 			} else {
-				double result = 0;
+				double result = 1;
 				for (FuzzySet function : functions) {
-					result = Math.max(result, function.apply(value).get());
+					result *= function.apply(value).get();
 				}
-				return FuzzyValue.of(result);
+				return FuzzyValue.of(1 - result);
 			}
 		}
 	}

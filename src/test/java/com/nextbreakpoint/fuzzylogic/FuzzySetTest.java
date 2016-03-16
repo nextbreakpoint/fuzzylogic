@@ -27,4 +27,13 @@ public class FuzzySetTest {
 		FuzzyValue value = fuzzySet.apply(5);
 		assertEquals(0.5, value.get(), PRECISION);
 	}
+
+	@Test
+	public void fuzzySet_shouldReturnDot5_whenInputValueIs10_andFuzzySetIsMaxOfTwoSetsLinearInRange0To20() {
+		FuzzySet fuzzySetA = (value) -> FuzzyValue.of(value < 0 ? 0 : value > 20 ? 1 : value / 20);
+		FuzzySet fuzzySetB = (value) -> FuzzyValue.of(value < 0 ? 0 : value > 20 ? 1 : value / 20);
+		FuzzySet union = FuzzySet.max(fuzzySetA, fuzzySetB);
+		FuzzyValue value = union.apply(10);
+		assertEquals(0.5, value.get(), PRECISION);
+	}
 }
