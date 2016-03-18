@@ -31,12 +31,12 @@ public interface FuzzySet {
 		return value -> FuzzyValue.of(Stream.of(sets).mapToDouble(set -> set.apply(value).get()).max().orElse(0));
 	}
 
-	public default FuzzySet triangle(double begin, double end) {
+	public static FuzzySet triangle(double begin, double end) {
 		double delta = (end - begin) / 2;
-		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end ? (value - end) / delta : 0);
+		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end ? (end - value) / delta : 0);
 	}
 
-	public default FuzzySet trapezoid(double begin, double end, double delta) {
-		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end - delta ? 1 : value < end ? (value - end) / delta : 0);
+	public static FuzzySet trapezoid(double begin, double end, double delta) {
+		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end - delta ? 1 : value < end ? (end - value) / delta : 0);
 	}
 }

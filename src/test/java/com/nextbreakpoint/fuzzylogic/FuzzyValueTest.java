@@ -13,31 +13,19 @@ public class FuzzyValueTest {
 	public ExpectedException exception = ExpectedException.none();
 	
 	@Test
-	public void fuzzyValue_shouldThrowException_whenValueIsLessThan0() {
+	public void costructor_shouldThrowException_whenValueIsLessThan0() {
 		exception.expect(IllegalArgumentException.class);
 		new FuzzyValue(-0.1);
 	}
 	
 	@Test
-	public void fuzzyValue_shouldThrowException_whenValueIsGreatThan1() {
+	public void costructor_shouldThrowException_whenValueIsGreatThan1() {
 		exception.expect(IllegalArgumentException.class);
 		new FuzzyValue(+1.1);
 	}
 
 	@Test
-	public void fuzzyValue_shouldNotThrowException_whenValueIs0() {
-		FuzzyValue value = new FuzzyValue(0.0);
-		assertEquals(0.0, value.get(), PRECISION);
-	}
-	
-	@Test
-	public void fuzzyValue_shouldNotThrowException_whenValueIs1() {
-		FuzzyValue value = new FuzzyValue(1.0);
-		assertEquals(1.0, value.get(), PRECISION);
-	}
-	
-	@Test
-	public void fuzzyValue_shouldNotThrowException_whenValueIsDot5() {
+	public void get_shouldReturnValue() {
 		FuzzyValue value = new FuzzyValue(0.5);
 		assertEquals(0.5, value.get(), PRECISION);
 	}

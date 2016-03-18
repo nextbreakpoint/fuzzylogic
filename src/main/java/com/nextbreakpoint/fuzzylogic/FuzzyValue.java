@@ -6,7 +6,7 @@ public class FuzzyValue {
 	public FuzzyValue(double value) {
 		this.value = value;
 		if (value < 0 || value > 1) {
-			throw new IllegalArgumentException("Value must be >= 0 and <= 1");
+			throw new IllegalArgumentException("Value must be >= 0 and <= 1. Value is " + value);
 		}
 	}
 
