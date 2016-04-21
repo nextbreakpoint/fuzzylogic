@@ -74,7 +74,7 @@ public abstract class FuzzyRule implements FuzzySet {
 			} else {
 				double result = 1;
 				for (FuzzySet function : functions) {
-					result *= function.apply(value).get();
+					result *= (1 - function.apply(value).get());
 				}
 				return FuzzyValue.of(1 - result);
 			}

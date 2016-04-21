@@ -88,6 +88,6 @@ public class FuzzyRuleTest {
 		when(fuzzySet2.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.2));
 		FuzzyRule rule = FuzzyRule.or(fuzzySet1, fuzzySet2);
 		FuzzyValue result = rule.apply(5);
-		assertEquals(0.9, result.get(), PRECISION);
+		assertEquals(0.6, result.get(), PRECISION);
 	}
 }
