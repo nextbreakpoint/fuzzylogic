@@ -1,7 +1,5 @@
 package com.nextbreakpoint.fuzzylogic;
 
-import java.util.stream.Stream;
-
 @FunctionalInterface
 public interface FuzzySet {
 	public FuzzyValue apply(double value);
@@ -11,29 +9,25 @@ public interface FuzzySet {
 	}
 
 	public default double centroid(double begin, double end, int steps) {
+		if (steps < 2) {
+			return 0;
+		}
 		double y = 0;
-		double z = 0;
 		double yNum = 0;
 		double yDen = 0;
 		double x = begin;
-		double dx = (end - begin) / steps;
+		double dx = (end - begin) / (steps - 1);
 		for (int i = 0; i < steps; i++) {
 			y = apply(x).get();
-			z = x * dx;
-			yNum += y * z;
-			yDen += z;
+			yNum += y * x;
+			yDen += y;
 			x += dx;
 		}
 		return yNum / yDen;
 	}
 
-	public static FuzzySet max(FuzzySet... sets) {
-		return value -> FuzzyValue.of(Stream.of(sets).mapToDouble(set -> set.apply(value).get()).max().orElse(0));
-	}
-
 	public static FuzzySet triangle(double begin, double end) {
-		double delta = (end - begin) / 2;
-		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end ? (end - value) / delta : 0);
+		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + ((end - begin) / 2) ? (value - begin) / ((end - begin) / 2) : value < end ? (end - value) / ((end - begin) / 2) : 0);
 	}
 
 	public static FuzzySet trapezoid(double begin, double end, double delta) {

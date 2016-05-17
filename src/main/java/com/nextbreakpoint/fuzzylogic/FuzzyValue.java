@@ -3,6 +3,11 @@ package com.nextbreakpoint.fuzzylogic;
 public class FuzzyValue {
 	private final double value;
 
+	@Override
+	public String toString() {
+		return "" + value + "";
+	}
+
 	public FuzzyValue(double value) {
 		this.value = value;
 		if (value < 0 || value > 1) {
