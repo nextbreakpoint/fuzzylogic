@@ -35,26 +35,26 @@ public class FuzzySystem {
 		return rules.size();
 	}
 
-	public FuzzySystem addInput(FuzzySet setA, FuzzySet setB, FuzzySet... otherSets) {
+	public FuzzySystem addInput(FuzzySet set, FuzzySet... otherSets) {
 		List<FuzzyInput> newInputs = new ArrayList<>();
 		newInputs.addAll(inputs);
-		FuzzySet[] sets = new FuzzySet[otherSets.length + 2];
-		sets[0] = setA;
-		sets[1] = setB;
-		System.arraycopy(otherSets, 0, sets, 2, otherSets.length);
-		newInputs.add(new FuzzyInput(sets));
+		newInputs.add(FuzzyInput.of(set, otherSets));
 		return new FuzzySystem(newInputs, outputs, rules);
 	}
 
-	public FuzzySystem addOutput(FuzzySet setA, FuzzySet setB, FuzzySet... otherSets) {
+	public FuzzySystem addOutput(FuzzySet set, FuzzySet... otherSets) {
 		List<FuzzyOutput> newOutputs = new ArrayList<>();
 		newOutputs.addAll(outputs);
-		FuzzySet[] sets = new FuzzySet[otherSets.length + 2];
-		sets[0] = setA;
-		sets[1] = setB;
-		System.arraycopy(otherSets, 0, sets, 2, otherSets.length);
-		newOutputs.add(new FuzzyOutput(sets));
+		newOutputs.add(FuzzyOutput.of(set, otherSets));
 		return new FuzzySystem(inputs, newOutputs, rules);
+	}
+
+	public FuzzySystem addRule(FuzzyRule rule) {
+		List<FuzzyRule> newRules = new ArrayList<>();
+		newRules.addAll(rules);
+		newRules.add(rule);
+		// TODO verify set belongs to at least one input
+		return new FuzzySystem(inputs, outputs, newRules);
 	}
 
 	public FuzzyInput input(int index) {
@@ -63,29 +63,5 @@ public class FuzzySystem {
 
 	public FuzzyOutput output(int index) {
 		return outputs.get(index);
-	}
-
-	public FuzzySystem addRule(FuzzySet[] outputSets, FuzzySet set) {
-		List<FuzzyRule> newRules = new ArrayList<>();
-		newRules.addAll(rules);
-		newRules.add(FuzzyRule.of(set));
-		// TODO verify set belongs to at least one input
-		return new FuzzySystem(inputs, outputs, newRules);
-	}
-
-	public FuzzySystem addRuleAnd(FuzzySet[] outputSets, FuzzySet setA, FuzzySet setB, FuzzySet... otherSets) {
-		List<FuzzyRule> newRules = new ArrayList<>();
-		newRules.addAll(rules);
-		newRules.add(FuzzyRule.and(setA, setB, otherSets));
-		// TODO verify set belongs to at least one input
-		return new FuzzySystem(inputs, outputs, newRules);
-	}
-
-	public FuzzySystem addRuleOr(FuzzySet[] outputSets, FuzzySet setA, FuzzySet setB, FuzzySet... otherSets) {
-		List<FuzzyRule> newRules = new ArrayList<>();
-		newRules.addAll(rules);
-		newRules.add(FuzzyRule.or(setA, setB, otherSets));
-		// TODO verify set belongs to at least one input
-		return new FuzzySystem(inputs, outputs, newRules);
 	}
 }

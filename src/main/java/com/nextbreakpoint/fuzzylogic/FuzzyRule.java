@@ -2,82 +2,22 @@ package com.nextbreakpoint.fuzzylogic;
 
 import java.util.Objects;
 
-public abstract class FuzzyRule implements FuzzySet {
-	protected final FuzzySet[] functions;
+public class FuzzyRule {
+	private FuzzyExpression when;
+	private FuzzyInference then;
 	
-	private FuzzyRule(FuzzySet[] functions) {
-		Objects.requireNonNull(functions);
-		this.functions = functions;
-	}
-
-	public abstract FuzzyValue apply(double value);
-	
-	public static FuzzyRule of(FuzzySet set) {
-		return new FuzzyRuleSingle(set);
+	private FuzzyRule(FuzzyExpression when, FuzzyInference then) {
+		Objects.requireNonNull(when);
+		Objects.requireNonNull(then);
+		this.when = when;
+		this.then = then;
 	}
 	
-	public static FuzzyRule and(FuzzySet setA, FuzzySet setB, FuzzySet... otherSets) {
-		FuzzySet[] sets = new FuzzySet[otherSets.length + 2];
-		sets[0] = setA;
-		sets[1] = setB;
-		System.arraycopy(otherSets, 0, sets, 2, otherSets.length);
-		return new FuzzyRuleAnd(sets);
+	public FuzzySet[] evaluate(double value) {
+		return then.apply(when.apply(value));
 	}
-
-	public static FuzzyRule or(FuzzySet setA, FuzzySet setB, FuzzySet... otherSets) {
-		FuzzySet[] sets = new FuzzySet[otherSets.length + 2];
-		sets[0] = setA;
-		sets[1] = setB;
-		System.arraycopy(otherSets, 0, sets, 2, otherSets.length);
-		return new FuzzyRuleOr(sets);
-	}
-
-	public static class FuzzyRuleSingle extends FuzzyRule {
-		private FuzzyRuleSingle(FuzzySet function) {
-			super(new FuzzySet[] { function });
-		}
-
-		@Override
-		public FuzzyValue apply(double value) {
-			return functions[0].apply(value);
-		}
-	}
-
-	public static class FuzzyRuleAnd extends FuzzyRule {
-		private FuzzyRuleAnd(FuzzySet[] functions) {
-			super(functions);
-		}
-
-		@Override
-		public FuzzyValue apply(double value) {
-			if (functions.length == 0) {
-				return FuzzyValue.of(0);
-			} else {
-				double result = 1;
-				for (FuzzySet function : functions) {
-					result *= function.apply(value).get();
-				}
-				return FuzzyValue.of(result);
-			}
-		}
-	}
-
-	public static class FuzzyRuleOr extends FuzzyRule {
-		private FuzzyRuleOr(FuzzySet[] functions) {
-			super(functions);
-		}
-
-		@Override
-		public FuzzyValue apply(double value) {
-			if (functions.length == 0) {
-				return FuzzyValue.of(1);
-			} else {
-				double result = 1;
-				for (FuzzySet function : functions) {
-					result *= (1 - function.apply(value).get());
-				}
-				return FuzzyValue.of(1 - result);
-			}
-		}
+	
+	public static FuzzyRule of(FuzzyExpression when, FuzzyInference then) {
+		return new FuzzyRule(when, then);
 	}
 }

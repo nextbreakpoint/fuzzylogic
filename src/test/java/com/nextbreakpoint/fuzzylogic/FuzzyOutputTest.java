@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-public class FuzzyRuleTest {
+public class FuzzyOutputTest {
 	private static final double PRECISION = 0.001;
 	
 //	@Test
