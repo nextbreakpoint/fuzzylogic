@@ -52,4 +52,72 @@ public class FuzzySystemTest {
 
 		assertEquals(0.5 + 0.3, result, PRECISION);
 	}
+
+	@Test
+	public void emptySystem_shouldReturnInputSizeIsZero() {
+		FuzzySystem system = new FuzzySystem();
+		assertEquals(0, system.inputSize());
+	}
+
+	@Test
+	public void emptySystem_shouldReturnOutputSizeIsZero() {
+		FuzzySystem system = new FuzzySystem();
+		assertEquals(0, system.outputSize());
+	}
+
+	@Test
+	public void systemWithOneInput_shouldReturnInputSizeIsOne() {
+		FuzzySystem system = new FuzzySystem();
+		FuzzySet fuzzySet1 = FuzzySet.triangle(-1.5, 0.5);
+		FuzzySet fuzzySet2 = FuzzySet.triangle(-0.5, 1.5);
+		assertEquals(1, system.addInput(fuzzySet1, fuzzySet2).inputSize());
+	}
+
+	@Test
+	public void systemWithOneOutput_shouldReturnOutputSizeIsOne() {
+		FuzzySystem system = new FuzzySystem();
+		FuzzySet fuzzySet1 = FuzzySet.triangle(-1.5, 0.5);
+		FuzzySet fuzzySet2 = FuzzySet.triangle(-0.5, 1.5);
+		assertEquals(1, system.addOutput(fuzzySet1, fuzzySet2).outputSize());
+	}
+
+	@Test
+	public void systemWithOneInput_shouldReturnCorrectNumberOfFuzzySets() {
+		FuzzySystem system = new FuzzySystem();
+		FuzzySet fuzzySet1 = FuzzySet.triangle(-1.5, 0.5);
+		FuzzySet fuzzySet2 = FuzzySet.triangle(-0.5, 1.5);
+		assertEquals(2, system.addInput(fuzzySet1, fuzzySet2).input(0).numberOfSets());
+	}
+
+	@Test
+	public void systemWithOneOutput_shouldReturnCorrectNumberOfFuzzySets() {
+		FuzzySystem system = new FuzzySystem();
+		FuzzySet fuzzySet1 = FuzzySet.triangle(-1.5, 0.5);
+		FuzzySet fuzzySet2 = FuzzySet.triangle(-0.5, 1.5);
+		assertEquals(2, system.addOutput(fuzzySet1, fuzzySet2).output(0).numberOfSets());
+	}
+
+	@Test
+	public void emptySystem_shouldReturnRuleSizeIsZero() {
+		FuzzySystem system = new FuzzySystem();
+		FuzzySet fuzzySet1 = FuzzySet.triangle(-1.5, 0.5);
+		FuzzySet fuzzySet2 = FuzzySet.triangle(-0.5, 1.5);
+		assertEquals(0, system.addInput(fuzzySet1, fuzzySet2).addOutput(fuzzySet1, fuzzySet2).numberOfRules());
+	}
+
+	@Test
+	public void systemWithAndRule_shouldReturnCorrectNumberOfFuzzyRules() {
+		FuzzySystem system = new FuzzySystem();
+		FuzzySet fuzzySet1 = FuzzySet.triangle(-1.5, 0.5);
+		FuzzySet fuzzySet2 = FuzzySet.triangle(-0.5, 1.5);
+		assertEquals(1, system.addInput(fuzzySet1, fuzzySet2).addOutput(fuzzySet1, fuzzySet2).addRuleAnd(new FuzzySet[] { fuzzySet1 }, fuzzySet1, fuzzySet2).numberOfRules());
+	}
+
+	@Test
+	public void systemWithOrRule_shouldReturnCorrectNumberOfFuzzyRules() {
+		FuzzySystem system = new FuzzySystem();
+		FuzzySet fuzzySet1 = FuzzySet.triangle(-1.5, 0.5);
+		FuzzySet fuzzySet2 = FuzzySet.triangle(-0.5, 1.5);
+		assertEquals(1, system.addInput(fuzzySet1, fuzzySet2).addOutput(fuzzySet1, fuzzySet2).addRuleOr(new FuzzySet[] { fuzzySet1 }, fuzzySet1, fuzzySet2).numberOfRules());
+	}
 }
