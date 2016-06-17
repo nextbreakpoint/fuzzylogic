@@ -14,7 +14,7 @@ public class FuzzyRule {
 		this.then = then;
 	}
 	
-	public FuzzySet[] evaluate(Map<String, Double> inputs) {
+	public FuzzyVariable[] evaluate(Map<String, Double> inputs) {
 		return then.apply(when.evaluate(inputs));
 	}
 	

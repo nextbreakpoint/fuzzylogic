@@ -17,6 +17,10 @@ public class FuzzyOutput {
 		this.sets = sets;
 	}
 
+	public String name() {
+		return name;
+	}
+
 	public int numberOfSets() {
 		return sets.length;
 	}

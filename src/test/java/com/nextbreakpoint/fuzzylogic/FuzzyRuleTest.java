@@ -47,8 +47,17 @@ public class FuzzyRuleTest {
 		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzySet.constant(1.0)));
 		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzySet.constant(0.5)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
-		FuzzySet[] sets = rule.evaluate(getInputs());
-		assertEquals(1, sets.length);
+		FuzzyVariable[] variables = rule.evaluate(getInputs());
+		assertEquals(1, variables.length);
+	}
+
+	@Test
+	public void should_return_name_when_number_of_outputs_is_one() {
+		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzySet.constant(1.0)));
+		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzySet.constant(0.5)));
+		FuzzyRule rule = FuzzyRule.of(when, then);
+		FuzzyVariable[] variables = rule.evaluate(getInputs());
+		assertEquals("output", variables[0].name());
 	}
 
 	@Test
@@ -56,8 +65,8 @@ public class FuzzyRuleTest {
 		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzySet.constant(0.5)));
 		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzySet.constant(0.3)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
-		FuzzySet[] sets = rule.evaluate(getInputs());
-		assertEquals(0.3, sets[0].apply(0).get(), PRECISION);
+		FuzzyVariable[] variables = rule.evaluate(getInputs());
+		assertEquals(0.3, variables[0].set().apply(0).get(), PRECISION);
 	}
 
 	@Test
@@ -65,8 +74,8 @@ public class FuzzyRuleTest {
 		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzySet.constant(0.5)));
 		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzySet.constant(0.8)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
-		FuzzySet[] sets = rule.evaluate(getInputs());
-		assertEquals(0.5, sets[0].apply(0).get(), PRECISION);
+		FuzzyVariable[] variables = rule.evaluate(getInputs());
+		assertEquals(0.5, variables[0].set().apply(0).get(), PRECISION);
 	}
 
 	@Test

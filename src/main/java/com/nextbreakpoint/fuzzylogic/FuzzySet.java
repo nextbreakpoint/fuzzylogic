@@ -1,6 +1,7 @@
 package com.nextbreakpoint.fuzzylogic;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,6 +48,10 @@ public interface FuzzySet {
 		sets[0] = set;
 		System.arraycopy(otherSets, 0, sets, 1, otherSets.length);
 		return new MergedSet(sets);
+	}
+
+	public static FuzzySet of(Collection<FuzzySet> collection) {
+		return new MergedSet(collection.toArray(new FuzzySet[0]));
 	}
 
 	public class MergedSet implements FuzzySet {

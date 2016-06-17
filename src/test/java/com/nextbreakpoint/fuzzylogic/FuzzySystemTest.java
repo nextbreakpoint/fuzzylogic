@@ -70,22 +70,22 @@ public class FuzzySystemTest {
 	@Test
 	public void should_return_array_with_same_size_as_number_of_outputs() {
 		FuzzySystem fuzzySystem = getFuzzySystem();
-		double[] outputs = fuzzySystem.evaluate(getInputs1());
-		assertEquals(1, outputs.length);
+		Map<String, Double> outputs = fuzzySystem.evaluate(getInputs1(), -1.5 + 0.3, 1.5 + 0.3, 25);
+		assertEquals(1, outputs.size());
 	}
 
 	@Test
 	public void should_return_value_when_input_activates_rule_1() {
 		FuzzySystem fuzzySystem = getFuzzySystem();
-		double[] outputs = fuzzySystem.evaluate(getInputs1());
-		assertEquals(-0.5 + 0.3, outputs[0], PRECISION);
+		Map<String, Double> outputs = fuzzySystem.evaluate(getInputs1(), -1.5 + 0.3, 1.5 + 0.3, 25);
+		assertEquals(-0.5 + 0.3, outputs.get("output"), PRECISION);
 	}
 
 	@Test
 	public void should_return_value_when_input_activates_rule_B() {
 		FuzzySystem fuzzySystem = getFuzzySystem();
-		double[] outputs = fuzzySystem.evaluate(getInputs2());
-		assertEquals(0.5 + 0.3, outputs[0], PRECISION);
+		Map<String, Double> outputs = fuzzySystem.evaluate(getInputs2(), -1.5 + 0.3, 1.5 + 0.3, 25);
+		assertEquals(0.5 + 0.3, outputs.get("output"), PRECISION);
 	}
 
 	private FuzzySystem getFuzzySystem() {

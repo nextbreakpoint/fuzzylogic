@@ -14,21 +14,21 @@ public class FuzzyInference {
 		this.variables = variables;
 	}
 
-	public int numberOfSets() {
+	public int numberOfVariables() {
 		return variables.length;
 	}
 
-	public FuzzySet[] apply(FuzzyValue value) {
-		FuzzySet[] outSets = new FuzzySet[variables.length];
+	public FuzzyVariable[] apply(FuzzyValue value) {
+		FuzzyVariable[] outputs = new FuzzyVariable[variables.length];
 		for (int i = 0; i < variables.length; i++) {
-			outSets[i] = variables[i].set().limit(value);
+			outputs[i] = FuzzyVariable.of(variables[i].name(), variables[i].set().limit(value));
 		}
-		return outSets;
+		return outputs;
 	}
 	
-	public static FuzzyInference of(FuzzyVariable set, FuzzyVariable... otherVariables) {
+	public static FuzzyInference of(FuzzyVariable variable, FuzzyVariable... otherVariables) {
 		FuzzyVariable[] variables = new FuzzyVariable[otherVariables.length + 1];
-		variables[0] = set;
+		variables[0] = variable;
 		System.arraycopy(otherVariables, 0, variables, 1, otherVariables.length);
 		return new FuzzyInference(variables);
 	}
