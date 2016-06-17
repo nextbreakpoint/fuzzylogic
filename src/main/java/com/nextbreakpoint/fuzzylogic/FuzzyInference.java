@@ -1,12 +1,16 @@
 package com.nextbreakpoint.fuzzylogic;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class FuzzyInference {
-	private FuzzySet[] sets;
+	private final FuzzySet[] sets;
 
 	private FuzzyInference(FuzzySet[] sets) {
 		Objects.requireNonNull(sets);
+		if (Arrays.stream(sets).anyMatch(set -> set == null)) {
+			throw new NullPointerException("Set can't be null");
+		}
 		this.sets = sets;
 	}
 

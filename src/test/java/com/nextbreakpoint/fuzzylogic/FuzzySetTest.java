@@ -8,21 +8,21 @@ public class FuzzySetTest {
 	private static final double PRECISION = 0.001;
 
 	@Test
-	public void apply_shouldReturnValue_whenSetIsConstant() {
+	public void should_return_value_when_set_is_constant() {
 		FuzzySet fuzzySet = (value) -> FuzzyValue.of(0.5);
 		FuzzyValue value = fuzzySet.apply(5);
 		assertEquals(0.5, value.get(), PRECISION);
 	}
 
 	@Test
-	public void apply_shouldReturnValue_whenSetIsTriangle() {
+	public void should_return_value_when_set_is_triangle() {
 		FuzzySet fuzzySet = FuzzySet.triangle(-1, 1);
 		FuzzyValue value = fuzzySet.apply(0.5);
 		assertEquals(0.5, value.get(), PRECISION);
 	}
 
 	@Test
-	public void apply_shouldReturnValue_whenRuleIsAnd_and_fuzzySetsAreTriangles() {
+	public void should_return_value_when_expression_is_AND_of_triangle_sets() {
 		FuzzySet fuzzySetA = FuzzySet.triangle(-1.5, 0.5);
 		FuzzySet fuzzySetB = FuzzySet.triangle(-0.5, 1.5);
 		FuzzySet fuzzySet = FuzzyExpression.and(fuzzySetA, fuzzySetB);
@@ -31,7 +31,7 @@ public class FuzzySetTest {
 	}
 
 	@Test
-	public void apply_shouldReturnValue_whenRuleIsOrAnd_and_fuzzySetsAreTriangles() {
+	public void should_return_value_when_expression_is_OR_of_triangle_sets() {
 		FuzzySet fuzzySetA = FuzzySet.triangle(-1.5, 0.5);
 		FuzzySet fuzzySetB = FuzzySet.triangle(-0.5, 1.5);
 		FuzzySet fuzzySet = FuzzyExpression.or(fuzzySetA, fuzzySetB);
@@ -40,7 +40,7 @@ public class FuzzySetTest {
 	}
 
 	@Test
-	public void apply_shouldReturnValue_whenRuleIsAnd_and_FuzzySetsAreTrapezoids() {
+	public void should_return_value_when_expression_is_AND_of_trapezoid_sets() {
 		FuzzySet fuzzySetA = FuzzySet.trapezoid(-1.0, 0.25, 0.5);
 		FuzzySet fuzzySetB = FuzzySet.trapezoid(-0.25, 1.0, 0.5);
 		FuzzySet fuzzySet = FuzzyExpression.and(fuzzySetA, fuzzySetB);
@@ -49,7 +49,7 @@ public class FuzzySetTest {
 	}
 
 	@Test
-	public void apply_shouldReturnValue_whenRuleIsOr_and_FuzzySetsAreTrapezoids() {
+	public void should_return_value_when_expression_is_OR_of_trapezoid_sets() {
 		FuzzySet fuzzySetA = FuzzySet.trapezoid(-1.0, 0.25, 0.5);
 		FuzzySet fuzzySetB = FuzzySet.trapezoid(-0.25, 1.0, 0.5);
 		FuzzySet fuzzySet = FuzzyExpression.or(fuzzySetA, fuzzySetB);
@@ -58,7 +58,7 @@ public class FuzzySetTest {
 	}
 
 	@Test
-	public void centroid_shouldReturnValue_whenFuzzySetsAreTriangles() {
+	public void should_return_centroid_when_sets_are_triangles() {
 		FuzzySet fuzzySetA = FuzzySet.triangle(-1.5 + 0.3, 0.5 + 0.3);
 		FuzzySet fuzzySetB = FuzzySet.triangle(-0.5 + 0.3, 1.5 + 0.3);
 		FuzzySet fuzzySet = FuzzyExpression.or(fuzzySetA, fuzzySetB);
@@ -67,7 +67,7 @@ public class FuzzySetTest {
 	}
 
 	@Test
-	public void centroid_shouldReturnValue_whenFuzzySetsAreTrapezoids() {
+	public void should_return_centroid_when_sets_are_trapezoids() {
 		FuzzySet fuzzySetA = FuzzySet.trapezoid(-1.0 + 0.3, 0.25 + 0.3, 0.5);
 		FuzzySet fuzzySetB = FuzzySet.trapezoid(-0.25 + 0.3, 1.0 + 0.3, 0.5);
 		FuzzySet fuzzySet = FuzzyExpression.or(fuzzySetA, fuzzySetB);

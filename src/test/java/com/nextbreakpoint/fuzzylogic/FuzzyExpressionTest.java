@@ -13,7 +13,7 @@ public class FuzzyExpressionTest {
 	private static final double PRECISION = 0.001;
 	
 	@Test
-	public void apply_shouldCallApplyOnSet() {
+	public void should_call_apply_on_set() {
 		FuzzySet fuzzySet = mock(FuzzySet.class);
 		when(fuzzySet.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.5));
 		FuzzyExpression exp = FuzzyExpression.of(fuzzySet);
@@ -22,7 +22,7 @@ public class FuzzyExpressionTest {
 	}
 	
 	@Test
-	public void apply_shouldCallApplyOnAllSets_whenRuleIsAnd() {
+	public void should_call_apply_on_all_sets_when_expression_is_AND() {
 		FuzzySet fuzzySet1 = mock(FuzzySet.class);
 		FuzzySet fuzzySet2 = mock(FuzzySet.class);
 		when(fuzzySet1.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.5));
@@ -34,7 +34,7 @@ public class FuzzyExpressionTest {
 	}
 	
 	@Test
-	public void apply_shouldCallApplyOnAllSets_whenRuleIsOr() {
+	public void should_call_apply_on_all_sets_when_expression_is_OR() {
 		FuzzySet fuzzySet1 = mock(FuzzySet.class);
 		FuzzySet fuzzySet2 = mock(FuzzySet.class);
 		when(fuzzySet1.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.5));
@@ -46,7 +46,7 @@ public class FuzzyExpressionTest {
 	}
 	
 	@Test
-	public void apply_shouldCallApplyOnAllRules_whenRuleIsAnd() {
+	public void should_call_apply_on_all_rules_when_expression_is_AND() {
 		FuzzyExpression apply1 = mock(FuzzyExpression.class);
 		FuzzyExpression apply2 = mock(FuzzyExpression.class);
 		when(apply1.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.5));
@@ -58,7 +58,7 @@ public class FuzzyExpressionTest {
 	}
 	
 	@Test
-	public void apply_shouldCallApplyOnAllRules_whenRuleIsOr() {
+	public void should_call_apply_on_all_rules_when_expression_is_OR() {
 		FuzzyExpression apply1 = mock(FuzzyExpression.class);
 		FuzzyExpression apply2 = mock(FuzzyExpression.class);
 		when(apply1.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.5));
@@ -70,7 +70,7 @@ public class FuzzyExpressionTest {
 	}
 	
 	@Test
-	public void apply_shouldReturnValue_whenRuleIsAnd() {
+	public void should_return_value_when_expression_is_AND() {
 		FuzzySet fuzzySet1 = mock(FuzzySet.class);
 		FuzzySet fuzzySet2 = mock(FuzzySet.class);
 		when(fuzzySet1.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.5));
@@ -81,7 +81,7 @@ public class FuzzyExpressionTest {
 	}
 	
 	@Test
-	public void apply_shouldReturnValue_whenRuleIsOr() {
+	public void should_return_value_when_expression_is_OR() {
 		FuzzySet fuzzySet1 = mock(FuzzySet.class);
 		FuzzySet fuzzySet2 = mock(FuzzySet.class);
 		when(fuzzySet1.apply(any(Double.class))).thenReturn(FuzzyValue.of(0.5));

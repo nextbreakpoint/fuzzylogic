@@ -33,4 +33,8 @@ public interface FuzzySet {
 	public static FuzzySet trapezoid(double begin, double end, double delta) {
 		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end - delta ? 1 : value < end ? (end - value) / delta : 0);
 	}
+
+	public static FuzzySet constant(double v) {
+		return value -> FuzzyValue.of(v);
+	}
 }

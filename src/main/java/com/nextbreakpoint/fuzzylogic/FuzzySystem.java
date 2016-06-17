@@ -10,11 +10,11 @@ public class FuzzySystem {
 	private final List<FuzzyInput> inputs;
 	private final List<FuzzyOutput> outputs;
 
-	public FuzzySystem() {
+	private FuzzySystem() {
 		this(Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
 	}
-	
-	public FuzzySystem(List<FuzzyInput> inputs, List<FuzzyOutput> outputs, List<FuzzyRule> rules) {
+
+	private FuzzySystem(List<FuzzyInput> inputs, List<FuzzyOutput> outputs, List<FuzzyRule> rules) {
 		Objects.requireNonNull(rules);
 		Objects.requireNonNull(inputs);
 		Objects.requireNonNull(outputs);
@@ -35,21 +35,21 @@ public class FuzzySystem {
 		return rules.size();
 	}
 
-	public FuzzySystem addInput(FuzzySet set, FuzzySet... otherSets) {
+	public FuzzySystem addInputs(FuzzySet set, FuzzySet... otherSets) {
 		List<FuzzyInput> newInputs = new ArrayList<>();
 		newInputs.addAll(inputs);
 		newInputs.add(FuzzyInput.of(set, otherSets));
 		return new FuzzySystem(newInputs, outputs, rules);
 	}
 
-	public FuzzySystem addOutput(FuzzySet set, FuzzySet... otherSets) {
+	public FuzzySystem addOutputs(FuzzySet set, FuzzySet... otherSets) {
 		List<FuzzyOutput> newOutputs = new ArrayList<>();
 		newOutputs.addAll(outputs);
 		newOutputs.add(FuzzyOutput.of(set, otherSets));
 		return new FuzzySystem(inputs, newOutputs, rules);
 	}
 
-	public FuzzySystem addRule(FuzzyRule rule) {
+	public FuzzySystem addRules(FuzzyRule rule) {
 		List<FuzzyRule> newRules = new ArrayList<>();
 		newRules.addAll(rules);
 		newRules.add(rule);
@@ -63,5 +63,9 @@ public class FuzzySystem {
 
 	public FuzzyOutput output(int index) {
 		return outputs.get(index);
+	}
+
+	public static FuzzySystem empty() {
+		return new FuzzySystem();
 	}
 }

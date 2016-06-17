@@ -3,8 +3,8 @@ package com.nextbreakpoint.fuzzylogic;
 import java.util.Objects;
 
 public class FuzzyRule {
-	private FuzzyExpression when;
-	private FuzzyInference then;
+	private final FuzzyExpression when;
+	private final FuzzyInference then;
 	
 	private FuzzyRule(FuzzyExpression when, FuzzyInference then) {
 		Objects.requireNonNull(when);

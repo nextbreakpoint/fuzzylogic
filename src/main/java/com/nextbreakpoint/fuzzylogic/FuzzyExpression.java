@@ -30,7 +30,7 @@ public abstract class FuzzyExpression implements FuzzySet {
 		return new FuzzyExpressionOr(sets);
 	}
 
-	public static class FuzzyExpressionSingle extends FuzzyExpression {
+	private static class FuzzyExpressionSingle extends FuzzyExpression {
 		private FuzzyExpressionSingle(FuzzySet function) {
 			super(new FuzzySet[] { function });
 		}
@@ -41,7 +41,7 @@ public abstract class FuzzyExpression implements FuzzySet {
 		}
 	}
 
-	public static class FuzzyExpressionAnd extends FuzzyExpression {
+	private static class FuzzyExpressionAnd extends FuzzyExpression {
 		private FuzzyExpressionAnd(FuzzySet[] functions) {
 			super(functions);
 		}
@@ -60,7 +60,7 @@ public abstract class FuzzyExpression implements FuzzySet {
 		}
 	}
 
-	public static class FuzzyExpressionOr extends FuzzyExpression {
+	private static class FuzzyExpressionOr extends FuzzyExpression {
 		private FuzzyExpressionOr(FuzzySet[] functions) {
 			super(functions);
 		}
