@@ -30,6 +30,6 @@ public class FuzzyVariableTest {
 	@Test
 	public void should_return_set() {
 		FuzzyMembership fuzzyMembership = FuzzyMembership.constant(0);
-		assertEquals(fuzzyMembership, FuzzyVariable.of("test", fuzzyMembership).set());
+		assertEquals(fuzzyMembership, FuzzyVariable.of("test", fuzzyMembership).membership());
 	}
 }

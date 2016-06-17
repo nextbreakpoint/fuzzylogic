@@ -64,7 +64,7 @@ public class FuzzyRuleTest {
 		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyMembership.constant(0.3)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
 		FuzzyVariable[] variables = rule.evaluate(getInputs());
-		assertEquals(0.3, variables[0].set().apply(0).get(), PRECISION);
+		assertEquals(0.3, variables[0].membership().apply(0).get(), PRECISION);
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class FuzzyRuleTest {
 		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyMembership.constant(0.8)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
 		FuzzyVariable[] variables = rule.evaluate(getInputs());
-		assertEquals(0.5, variables[0].set().apply(0).get(), PRECISION);
+		assertEquals(0.5, variables[0].membership().apply(0).get(), PRECISION);
 	}
 
 	@Test

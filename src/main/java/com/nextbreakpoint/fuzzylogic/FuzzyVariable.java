@@ -5,29 +5,29 @@ import java.util.Objects;
 
 public class FuzzyVariable implements FuzzyExpression {
 	protected final String name;
-	protected final FuzzyMembership set;
+	protected final FuzzyMembership membership;
 
-	private FuzzyVariable(String name, FuzzyMembership set) {
+	private FuzzyVariable(String name, FuzzyMembership membership) {
 		Objects.requireNonNull(name);
-		Objects.requireNonNull(set);
+		Objects.requireNonNull(membership);
 		this.name = name;
-		this.set = set;
+		this.membership = membership;
 	}
 
 	public String name() {
 		return name;
 	}
 
-	public FuzzyMembership set() {
-		return set;
+	public FuzzyMembership membership() {
+		return membership;
 	}
 
-	public static FuzzyVariable of(String name, FuzzyMembership set) {
-		return new FuzzyVariable(name, set);
+	public static FuzzyVariable of(String name, FuzzyMembership membership) {
+		return new FuzzyVariable(name, membership);
 	}
 
 	@Override
 	public FuzzyValue evaluate(Map<String, Double> inputs) {
-		return set.apply(inputs.get(name));
+		return membership.apply(inputs.get(name));
 	}
 }

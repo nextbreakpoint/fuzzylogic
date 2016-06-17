@@ -38,10 +38,10 @@ public class FuzzyInferenceTest {
 		FuzzyVariable fuzzyVar2 = mock(FuzzyVariable.class);
 		when(fuzzyVar1.name()).thenReturn("test");
 		when(fuzzyVar2.name()).thenReturn("test");
-		when(fuzzyVar1.set()).thenReturn(fuzzyMembership1);
-		when(fuzzyVar2.set()).thenReturn(fuzzyMembership2);
-		when(fuzzyVar1.set().limit(any())).thenReturn(fuzzyMembership1);
-		when(fuzzyVar2.set().limit(any())).thenReturn(fuzzyMembership2);
+		when(fuzzyVar1.membership()).thenReturn(fuzzyMembership1);
+		when(fuzzyVar2.membership()).thenReturn(fuzzyMembership2);
+		when(fuzzyVar1.membership().limit(any())).thenReturn(fuzzyMembership1);
+		when(fuzzyVar2.membership().limit(any())).thenReturn(fuzzyMembership2);
 		FuzzyInference.of(fuzzyVar1, fuzzyVar2).apply(FuzzyValue.of(0.5));
 		verify(fuzzyMembership1, times(1)).limit(FuzzyValue.of(0.5));
 		verify(fuzzyMembership2, times(1)).limit(FuzzyValue.of(0.5));
@@ -54,11 +54,11 @@ public class FuzzyInferenceTest {
 
 	@Test
 	public void should_return_set_when_value_is_not_limiting_set() {
-		assertEquals(0.3, FuzzyInference.of(FuzzyVariable.of("test", FuzzyMembership.constant(0.5))).apply(FuzzyValue.of(0.3))[0].set().apply(0).get(), PRECISION);
+		assertEquals(0.3, FuzzyInference.of(FuzzyVariable.of("test", FuzzyMembership.constant(0.5))).apply(FuzzyValue.of(0.3))[0].membership().apply(0).get(), PRECISION);
 	}
 
 	@Test
 	public void should_return_limit_set_when_value_is_limiting_set() {
-		assertEquals(0.5, FuzzyInference.of(FuzzyVariable.of("test", FuzzyMembership.constant(0.5))).apply(FuzzyValue.of(0.8))[0].set().apply(0).get(), PRECISION);
+		assertEquals(0.5, FuzzyInference.of(FuzzyVariable.of("test", FuzzyMembership.constant(0.5))).apply(FuzzyValue.of(0.8))[0].membership().apply(0).get(), PRECISION);
 	}
 }

@@ -32,8 +32,7 @@ public class FuzzySystem {
 	}
 
 	public Map<String, Double> evaluate(Map<String, Double> inputs, double start, double end, int steps) {
-		return rules.stream().map(rule -> rule.evaluate(inputs))
-			.collect(collector(start, end, steps));
+		return rules.stream().map(rule -> rule.evaluate(inputs)).collect(collector(start, end, steps));
 	}
 
 	private Collector<FuzzyVariable[], Map<String, List<FuzzyMembership>>, Map<String, Double>> collector(double start, double end, int steps) {
@@ -49,16 +48,16 @@ public class FuzzySystem {
 			(map1, map2) -> map1.putAll(map2));
 	}
 
-	private double centroid(List<FuzzyMembership> set, double end, int steps, double start) {
-		return FuzzyMembership.of(set).centroid(start, end, steps);
+	private double centroid(List<FuzzyMembership> membership, double end, int steps, double start) {
+		return FuzzyMembership.of(membership).centroid(start, end, steps);
 	}
 
 	private void accumulate(Map<String, List<FuzzyMembership>> map, FuzzyVariable var) {
-		List<FuzzyMembership> sets = map.get(var.name());
-		if (sets == null) {
-			sets = new LinkedList<>();
-			map.put(var.name(), sets);
+		List<FuzzyMembership> memberships = map.get(var.name());
+		if (memberships == null) {
+			memberships = new LinkedList<>();
+			map.put(var.name(), memberships);
 		}
-		sets.add(var.set());
+		memberships.add(var.membership());
 	}
 }
