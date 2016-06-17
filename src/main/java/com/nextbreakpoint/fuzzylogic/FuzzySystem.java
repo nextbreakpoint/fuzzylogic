@@ -1,9 +1,6 @@
 package com.nextbreakpoint.fuzzylogic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class FuzzySystem {
 	private final List<FuzzyRule> rules;
@@ -35,21 +32,21 @@ public class FuzzySystem {
 		return rules.size();
 	}
 
-	public FuzzySystem addInputs(FuzzySet set, FuzzySet... otherSets) {
+	public FuzzySystem addInput(FuzzyInput input) {
 		List<FuzzyInput> newInputs = new ArrayList<>();
 		newInputs.addAll(inputs);
-		newInputs.add(FuzzyInput.of(set, otherSets));
+		newInputs.add(input);
 		return new FuzzySystem(newInputs, outputs, rules);
 	}
 
-	public FuzzySystem addOutputs(FuzzySet set, FuzzySet... otherSets) {
+	public FuzzySystem addOutput(FuzzyOutput output) {
 		List<FuzzyOutput> newOutputs = new ArrayList<>();
 		newOutputs.addAll(outputs);
-		newOutputs.add(FuzzyOutput.of(set, otherSets));
+		newOutputs.add(output);
 		return new FuzzySystem(inputs, newOutputs, rules);
 	}
 
-	public FuzzySystem addRules(FuzzyRule rule) {
+	public FuzzySystem addRule(FuzzyRule rule) {
 		List<FuzzyRule> newRules = new ArrayList<>();
 		newRules.addAll(rules);
 		newRules.add(rule);
@@ -67,5 +64,15 @@ public class FuzzySystem {
 
 	public static FuzzySystem empty() {
 		return new FuzzySystem();
+	}
+
+	public double[] evaluate(Map<String, Double> inputs) {
+		double[] outputs = new double[outputSize()];
+//		FuzzyValue valueA = fuzzyRuleA.apply(value);
+//		FuzzyValue valueB = fuzzyRuleB.apply(value);
+//
+//		double result = FuzzyPredicate.or(fuzzySetOutputA.limit(valueA), fuzzySetOutputB.limit(valueB)).centroid(-1.5 + 0.3, 1.5 + 0.3, 25);
+//		rules.stream().map(rule -> rule.evaluate(0)).map(sets -> sets.)
+		return outputs;
 	}
 }

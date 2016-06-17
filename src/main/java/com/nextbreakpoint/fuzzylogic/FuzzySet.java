@@ -1,5 +1,9 @@
 package com.nextbreakpoint.fuzzylogic;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
+
 @FunctionalInterface
 public interface FuzzySet {
 	public FuzzyValue apply(double value);
@@ -36,5 +40,37 @@ public interface FuzzySet {
 
 	public static FuzzySet constant(double v) {
 		return value -> FuzzyValue.of(v);
+	}
+
+	public static FuzzySet of(FuzzySet set, FuzzySet... otherSets) {
+		FuzzySet[] sets = new FuzzySet[otherSets.length + 1];
+		sets[0] = set;
+		System.arraycopy(otherSets, 0, sets, 1, otherSets.length);
+		return new MergedSet(sets);
+	}
+
+	public class MergedSet implements FuzzySet {
+		private final FuzzySet[] sets;
+
+		private MergedSet(FuzzySet[] sets) {
+			Objects.nonNull(sets);
+			if (Arrays.stream(sets).anyMatch(set -> set == null)) {
+				throw new NullPointerException("Set can't be null");
+			}
+			this.sets = sets;
+		}
+
+		@Override
+		public FuzzyValue apply(double value) {
+			if (sets.length == 0) {
+				return FuzzyValue.of(1);
+			} else {
+				double result = 1;
+				for (int i = 0; i < sets.length; i++) {
+					result *= 1 - sets[i].apply(value).get();
+				}
+				return FuzzyValue.of(1 - result);
+			}
+		}
 	}
 }

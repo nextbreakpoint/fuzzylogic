@@ -4,32 +4,32 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class FuzzyInference {
-	private final FuzzySet[] sets;
+	private final FuzzyVariable[] variables;
 
-	private FuzzyInference(FuzzySet[] sets) {
-		Objects.requireNonNull(sets);
-		if (Arrays.stream(sets).anyMatch(set -> set == null)) {
-			throw new NullPointerException("Set can't be null");
+	private FuzzyInference(FuzzyVariable[] variables) {
+		Objects.requireNonNull(variables);
+		if (Arrays.stream(variables).anyMatch(set -> set == null)) {
+			throw new NullPointerException("Variable can't be null");
 		}
-		this.sets = sets;
+		this.variables = variables;
 	}
 
 	public int numberOfSets() {
-		return sets.length;
+		return variables.length;
 	}
 
 	public FuzzySet[] apply(FuzzyValue value) {
-		FuzzySet[] outSets = new FuzzySet[sets.length];
-		for (int i = 0; i < sets.length; i++) {
-			outSets[i] = sets[i].limit(value);
+		FuzzySet[] outSets = new FuzzySet[variables.length];
+		for (int i = 0; i < variables.length; i++) {
+			outSets[i] = variables[i].set().limit(value);
 		}
 		return outSets;
 	}
 	
-	public static FuzzyInference of(FuzzySet set, FuzzySet... otherSets) {
-		FuzzySet[] sets = new FuzzySet[otherSets.length + 1];
-		sets[0] = set;
-		System.arraycopy(otherSets, 0, sets, 1, otherSets.length);
-		return new FuzzyInference(sets);
+	public static FuzzyInference of(FuzzyVariable set, FuzzyVariable... otherVariables) {
+		FuzzyVariable[] variables = new FuzzyVariable[otherVariables.length + 1];
+		variables[0] = set;
+		System.arraycopy(otherVariables, 0, variables, 1, otherVariables.length);
+		return new FuzzyInference(variables);
 	}
 }

@@ -1,23 +1,24 @@
 package com.nextbreakpoint.fuzzylogic;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class FuzzyRule {
-	private final FuzzyExpression when;
+	private final FuzzyPredicate when;
 	private final FuzzyInference then;
 	
-	private FuzzyRule(FuzzyExpression when, FuzzyInference then) {
+	private FuzzyRule(FuzzyPredicate when, FuzzyInference then) {
 		Objects.requireNonNull(when);
 		Objects.requireNonNull(then);
 		this.when = when;
 		this.then = then;
 	}
 	
-	public FuzzySet[] evaluate(double value) {
-		return then.apply(when.apply(value));
+	public FuzzySet[] evaluate(Map<String, Double> inputs) {
+		return then.apply(when.evaluate(inputs));
 	}
 	
-	public static FuzzyRule of(FuzzyExpression when, FuzzyInference then) {
+	public static FuzzyRule of(FuzzyPredicate when, FuzzyInference then) {
 		return new FuzzyRule(when, then);
 	}
 }

@@ -16,18 +16,24 @@ public class FuzzyOutputTest {
 	public ExpectedException exception = ExpectedException.none();
 
 	@Test
-	public void should_throw_exception_when_output_is_null() {
+	public void should_throw_exception_when_name_is_null() {
 		exception.expect(NullPointerException.class);
-		FuzzyOutput.of(null);
+		FuzzyOutput.of(null, FuzzySet.constant(0));
+	}
+
+	@Test
+	public void should_throw_exception_when_set_is_null() {
+		exception.expect(NullPointerException.class);
+		FuzzyOutput.of("test", null);
 	}
 
 	@Test
 	public void should_return_number_of_sets_is_one_when_number_of_outputs_is_one() {
-		assertEquals(1, FuzzyOutput.of(FuzzySet.constant(0.5)).numberOfSets());
+		assertEquals(1, FuzzyOutput.of("test", FuzzySet.constant(0.5)).numberOfSets());
 	}
 
 	@Test
 	public void should_return_number_of_sets_is_two_when_number_of_outputs_is_two() {
-		assertEquals(2, FuzzyOutput.of(FuzzySet.constant(0.5), FuzzySet.constant(0.6)).numberOfSets());
+		assertEquals(2, FuzzyOutput.of("test", FuzzySet.constant(0.5), FuzzySet.constant(0.6)).numberOfSets());
 	}
 }
