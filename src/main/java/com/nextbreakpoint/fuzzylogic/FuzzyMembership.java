@@ -38,6 +38,14 @@ public interface FuzzyMembership {
 		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end - delta ? 1 : value < end ? (end - value) / delta : 0);
 	}
 
+	public static FuzzyMembership linear(double begin, double end) {
+		return value -> FuzzyValue.of(value < begin ? 0 : value < end ? (value - begin) / (end - begin) : 1);
+	}
+
+	public static FuzzyMembership inverse(FuzzyMembership membership) {
+		return value -> FuzzyValue.of(1 - membership.apply(value).get());
+	}
+
 	public static FuzzyMembership constant(double v) {
 		return value -> FuzzyValue.of(v);
 	}
