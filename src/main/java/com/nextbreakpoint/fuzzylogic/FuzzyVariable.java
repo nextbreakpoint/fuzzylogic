@@ -5,9 +5,9 @@ import java.util.Objects;
 
 public class FuzzyVariable implements FuzzyExpression {
 	protected final String name;
-	protected final FuzzySet set;
+	protected final FuzzyMembership set;
 
-	private FuzzyVariable(String name, FuzzySet set) {
+	private FuzzyVariable(String name, FuzzyMembership set) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(set);
 		this.name = name;
@@ -18,11 +18,11 @@ public class FuzzyVariable implements FuzzyExpression {
 		return name;
 	}
 
-	public FuzzySet set() {
+	public FuzzyMembership set() {
 		return set;
 	}
 
-	public static FuzzyVariable of(String name, FuzzySet set) {
+	public static FuzzyVariable of(String name, FuzzyMembership set) {
 		return new FuzzyVariable(name, set);
 	}
 

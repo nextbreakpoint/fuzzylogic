@@ -23,36 +23,36 @@ public class FuzzyPredicateTest {
 
 	@Test
 	public void should_return_value_when_expression_is_AND_of_triangle_sets() {
-		FuzzySet fuzzySetA = FuzzySet.triangle(-1.5, 0.5);
-		FuzzySet fuzzySetB = FuzzySet.triangle(-0.5, 1.5);
-		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.and(FuzzyVariable.of("test", fuzzySetA), FuzzyVariable.of("test", fuzzySetB));
+		FuzzyMembership fuzzyMembershipA = FuzzyMembership.triangle(-1.5, 0.5);
+		FuzzyMembership fuzzyMembershipB = FuzzyMembership.triangle(-0.5, 1.5);
+		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.and(FuzzyVariable.of("test", fuzzyMembershipA), FuzzyVariable.of("test", fuzzyMembershipB));
 		FuzzyValue value = fuzzyPredicate.evaluate(getInputs());
 		assertEquals(0.25, value.get(), PRECISION);
 	}
 
 	@Test
 	public void should_return_value_when_expression_is_OR_of_triangle_sets() {
-		FuzzySet fuzzySetA = FuzzySet.triangle(-1.5, 0.5);
-		FuzzySet fuzzySetB = FuzzySet.triangle(-0.5, 1.5);
-		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.or(FuzzyVariable.of("test", fuzzySetA), FuzzyVariable.of("test", fuzzySetB));
+		FuzzyMembership fuzzyMembershipA = FuzzyMembership.triangle(-1.5, 0.5);
+		FuzzyMembership fuzzyMembershipB = FuzzyMembership.triangle(-0.5, 1.5);
+		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.or(FuzzyVariable.of("test", fuzzyMembershipA), FuzzyVariable.of("test", fuzzyMembershipB));
 		FuzzyValue value = fuzzyPredicate.evaluate(getInputs());
 		assertEquals(0.75, value.get(), PRECISION);
 	}
 
 	@Test
 	public void should_return_value_when_expression_is_AND_of_trapezoid_sets() {
-		FuzzySet fuzzySetA = FuzzySet.trapezoid(-1.0, 0.25, 0.5);
-		FuzzySet fuzzySetB = FuzzySet.trapezoid(-0.25, 1.0, 0.5);
-		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.and(FuzzyVariable.of("test", fuzzySetA), FuzzyVariable.of("test", fuzzySetB));
+		FuzzyMembership fuzzyMembershipA = FuzzyMembership.trapezoid(-1.0, 0.25, 0.5);
+		FuzzyMembership fuzzyMembershipB = FuzzyMembership.trapezoid(-0.25, 1.0, 0.5);
+		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.and(FuzzyVariable.of("test", fuzzyMembershipA), FuzzyVariable.of("test", fuzzyMembershipB));
 		FuzzyValue value = fuzzyPredicate.evaluate(getInputs());
 		assertEquals(0.25, value.get(), PRECISION);
 	}
 
 	@Test
 	public void should_return_value_when_expression_is_OR_of_trapezoid_sets() {
-		FuzzySet fuzzySetA = FuzzySet.trapezoid(-1.0, 0.25, 0.5);
-		FuzzySet fuzzySetB = FuzzySet.trapezoid(-0.25, 1.0, 0.5);
-		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.or(FuzzyVariable.of("test", fuzzySetA), FuzzyVariable.of("test", fuzzySetB));
+		FuzzyMembership fuzzyMembershipA = FuzzyMembership.trapezoid(-1.0, 0.25, 0.5);
+		FuzzyMembership fuzzyMembershipB = FuzzyMembership.trapezoid(-0.25, 1.0, 0.5);
+		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.or(FuzzyVariable.of("test", fuzzyMembershipA), FuzzyVariable.of("test", fuzzyMembershipB));
 		FuzzyValue value = fuzzyPredicate.evaluate(getInputs());
 		assertEquals(0.75, value.get(), PRECISION);
 	}

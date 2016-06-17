@@ -13,7 +13,7 @@ public class FuzzyVariableTest {
 	@Test
 	public void should_throw_exception_when_name_is_null() {
 		exception.expect(NullPointerException.class);
-		FuzzyVariable.of(null, FuzzySet.constant(0));
+		FuzzyVariable.of(null, FuzzyMembership.constant(0));
 	}
 
 	@Test
@@ -24,12 +24,12 @@ public class FuzzyVariableTest {
 
 	@Test
 	public void should_return_name() {
-		assertEquals("test", FuzzyVariable.of("test", FuzzySet.constant(0)).name());
+		assertEquals("test", FuzzyVariable.of("test", FuzzyMembership.constant(0)).name());
 	}
 
 	@Test
 	public void should_return_set() {
-		FuzzySet fuzzySet = FuzzySet.constant(0);
-		assertEquals(fuzzySet, FuzzyVariable.of("test", fuzzySet).set());
+		FuzzyMembership fuzzyMembership = FuzzyMembership.constant(0);
+		assertEquals(fuzzyMembership, FuzzyVariable.of("test", fuzzyMembership).set());
 	}
 }
