@@ -1,10 +1,10 @@
 package com.nextbreakpoint.fuzzylogic;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 public class FuzzyValueTest {
 	private static final double PRECISION = 0.001;

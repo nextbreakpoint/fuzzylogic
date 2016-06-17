@@ -1,8 +1,8 @@
 package com.nextbreakpoint.fuzzylogic;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class FuzzyMembershipTest {
 	private static final double PRECISION = 0.001;

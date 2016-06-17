@@ -1,10 +1,7 @@
 package com.nextbreakpoint.fuzzylogic;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 public class FuzzySystem {
@@ -35,51 +32,33 @@ public class FuzzySystem {
 	}
 
 	public Map<String, Double> evaluate(Map<String, Double> inputs, double start, double end, int steps) {
-		return rules.stream().map(rule -> rule.evaluate(inputs)).collect(Collector.of(supplier(), accumulator(), combiner(), finisher(start, end, steps)));
+		return rules.stream().map(rule -> rule.evaluate(inputs))
+			.collect(collector(start, end, steps));
 	}
 
-	private Supplier<Map<String, List<FuzzyMembership>>> supplier() {
-		return () -> new HashMap<String, List<FuzzyMembership>>();
-	}
-
-	private BinaryOperator<Map<String, List<FuzzyMembership>>> combiner() {
-		return (map1, map2) -> { map1.putAll(map2); return map1; };
-	}
-
-	private BiConsumer<Map<String, List<FuzzyMembership>>, FuzzyVariable[]> accumulator() {
-		return (map, vars) -> combine(map, vars);
+	private Collector<FuzzyVariable[], Map<String, List<FuzzyMembership>>, Map<String, Double>> collector(double start, double end, int steps) {
+		return Collector.of(() -> new HashMap<String, List<FuzzyMembership>>(),
+        	(map, vars) -> Arrays.stream(vars).forEach(var -> accumulate(map, var)),
+        	(map1, map2) -> { map1.putAll(map2); return map1; },
+        	finisher(start, end, steps));
 	}
 
 	private Function<Map<String, List<FuzzyMembership>>, Map<String, Double>> finisher(double start, double end, int steps) {
-		return map -> map.entrySet().stream().collect(supplier2(), accumulator2(start, end, steps), combiner2());
+		return map -> map.entrySet().stream().collect(() -> new HashMap<String, Double>(),
+			(mapSets, entry) -> mapSets.put(entry.getKey(), centroid(entry.getValue(), end, steps, start)),
+			(map1, map2) -> map1.putAll(map2));
 	}
 
-	private void combine(Map<String, List<FuzzyMembership>> map, FuzzyVariable[] vars) {
-		Arrays.stream(vars).forEach(var -> combine(map, var));
+	private double centroid(List<FuzzyMembership> set, double end, int steps, double start) {
+		return FuzzyMembership.of(set).centroid(start, end, steps);
 	}
 
-	private void combine(Map<String, List<FuzzyMembership>> map, FuzzyVariable var) {
+	private void accumulate(Map<String, List<FuzzyMembership>> map, FuzzyVariable var) {
 		List<FuzzyMembership> sets = map.get(var.name());
 		if (sets == null) {
 			sets = new LinkedList<>();
 			map.put(var.name(), sets);
 		}
 		sets.add(var.set());
-	}
-
-	private Supplier<Map<String, Double>> supplier2() {
-		return () -> new HashMap<String, Double>();
-	}
-
-	private BiConsumer<Map<String, Double>, Map<String, Double>> combiner2() {
-		return (map1, map2) -> map1.putAll(map2);
-	}
-
-	private BiConsumer<Map<String, Double>, Map.Entry<String, List<FuzzyMembership>>> accumulator2(double start, double end, int steps) {
-		return (map, entry) -> combine(map, entry, start, end, steps);
-	}
-
-	private void combine(Map<String, Double> map, Map.Entry<String, List<FuzzyMembership>> entry, double start, double end, int steps) {
-		map.put(entry.getKey(), FuzzyMembership.of(entry.getValue()).centroid(start, end, steps));
 	}
 }
