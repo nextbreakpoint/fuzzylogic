@@ -3,9 +3,56 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.nextbreakpoint</groupId>
 	<artifactId>com.nextbreakpoint.fuzzylogic</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0.0</version>
+	<packaging>jar</packaging>
+	<name>FuzzyLogic</name>
+	<description>FuzzyLogic implements a API for creating and executing a Fuzzy System</description>
+	<url>https://github.com/nextbreakpoint/fuzzylogic</url>
+	<licenses>
+		<license>
+			<name>BSD 3</name>
+			<url>http://nextbreakpoint.com/licenses/BSD3</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Andrea Medeghini</name>
+			<email>andrea@nextbreakpoint.com</email>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:git@github.com:nextbreakpoint/fuzzylogic.git</connection>
+		<developerConnection>scm:git:git@github.com:nextbreakpoint/fuzzylogic.git</developerConnection>
+		<url>git@github.com:nextbreakpoint/fuzzylogic.git</url>
+	</scm>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -77,10 +124,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<distributionManagement>
-		<repository>
-			<id>maven-repository</id>
-			<url>file://${project.build.directory}/maven-repository</url>
-		</repository>
-	</distributionManagement>
 </project>
