@@ -6,7 +6,7 @@
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>FuzzyLogic</name>
-	<description>FuzzyLogic implements a API for creating and executing a Fuzzy System</description>
+	<description>FuzzyLogic is a framework for creating and executing Fuzzy Systems</description>
 	<url>https://github.com/nextbreakpoint/fuzzylogic</url>
 	<licenses>
 		<license>
@@ -124,4 +124,131 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>ossrh</id>
+			<activation>
+				<property>
+					<name>channel</name>
+					<value>ossrh</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.7</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>bintray</id>
+			<activation>
+				<property>
+					<name>channel</name>
+					<value>bintray</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<distributionManagement>
+				<repository>
+					<id>bintray</id>
+					<url>https://api.bintray.com/maven/${bintrayAccount}/maven/${project.artifactId}/;publish=1</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>github</id>
+			<activation>
+				<property>
+					<name>channel</name>
+					<value>github</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>de.jutzig</groupId>
+						<artifactId>github-release-plugin</artifactId>
+						<version>1.1.1</version>
+						<configuration>
+							<releaseName>${project.name} ${project.version}</releaseName>
+							<tag>v${project.version}</tag>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>twitter</id>
+			<activation>
+				<property>
+					<name>channel</name>
+					<value>twitter</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.nextbreakpoint</groupId>
+						<artifactId>twitter-maven-plugin</artifactId>
+						<version>1.0.1</version>
+						<configuration>
+							<debug>false</debug>
+							<oauthConsumerKey>${consumerKey}</oauthConsumerKey>
+							<oauthConsumerSecret>${consumerSecret}</oauthConsumerSecret>
+							<oauthAccessToken>${accessToken}</oauthAccessToken>
+							<oauthAccessTokenSecret>${accessTokenSecret}</oauthAccessTokenSecret>
+							<status>Version ${project.version} of ${project.name} has been released! ${project.url}</status>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

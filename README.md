@@ -1,6 +1,6 @@
 # FuzzyLogic 1.0.0
 
-FuzzyLogic implements a API for creating and executing a Fuzzy System.
+FuzzyLogic is a framework for creating and executing Fuzzy Systems.
 
 ## Example
 
