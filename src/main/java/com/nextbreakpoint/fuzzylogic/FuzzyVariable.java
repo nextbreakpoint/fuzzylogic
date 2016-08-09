@@ -5,12 +5,15 @@ import java.util.Objects;
 
 public class FuzzyVariable implements FuzzyExpression {
 	protected final String name;
+	protected final FuzzyDomain domain;
 	protected final FuzzyMembership membership;
 
-	private FuzzyVariable(String name, FuzzyMembership membership) {
+	private FuzzyVariable(String name, FuzzyDomain domain, FuzzyMembership membership) {
 		Objects.requireNonNull(name);
+		Objects.requireNonNull(domain);
 		Objects.requireNonNull(membership);
 		this.name = name;
+		this.domain = domain;
 		this.membership = membership;
 	}
 
@@ -18,16 +21,24 @@ public class FuzzyVariable implements FuzzyExpression {
 		return name;
 	}
 
+	public FuzzyDomain domain() {
+		return domain;
+	}
+
 	public FuzzyMembership membership() {
 		return membership;
 	}
 
-	public static FuzzyVariable of(String name, FuzzyMembership membership) {
-		return new FuzzyVariable(name, membership);
+	public static FuzzyVariable of(String name, FuzzyDomain domain, FuzzyMembership membership) {
+		return new FuzzyVariable(name, domain, membership);
 	}
 
 	@Override
 	public FuzzyValue evaluate(Map<String, Double> inputs) {
-		return membership.apply(inputs.get(name));
+		Double value = inputs.get(name);
+		if (value != null && domain.contains(value)) {
+			return membership.apply(inputs.get(name));
+		}
+		return FuzzyValue.of(0);
 	}
 }

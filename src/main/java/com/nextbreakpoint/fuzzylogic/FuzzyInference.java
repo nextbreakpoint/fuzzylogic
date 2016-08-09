@@ -21,7 +21,7 @@ public class FuzzyInference {
 	public FuzzyVariable[] apply(FuzzyValue value) {
 		FuzzyVariable[] outputs = new FuzzyVariable[variables.length];
 		for (int i = 0; i < variables.length; i++) {
-			outputs[i] = FuzzyVariable.of(variables[i].name(), variables[i].membership().limit(value));
+			outputs[i] = FuzzyVariable.of(variables[i].name(), variables[i].domain(), variables[i].membership().limit(value));
 		}
 		return outputs;
 	}
