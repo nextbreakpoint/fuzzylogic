@@ -3,6 +3,7 @@ package com.nextbreakpoint.fuzzylogic;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Function;
 
 @FunctionalInterface
 public interface FuzzyMembership {
@@ -30,17 +31,29 @@ public interface FuzzyMembership {
 		return yNum / yDen;
 	}
 
-	public static FuzzyMembership triangle(double begin, double end) {
-		return value -> FuzzyValue.of(FuzzyMath.triangle(begin, end).apply(value));
+	public default FuzzyMembership translate(double v) {
+		return value -> apply(value - v);
 	}
 
-	public static FuzzyMembership trapezoid(double begin, double end, double delta) {
-		return value -> FuzzyValue.of(FuzzyMath.trapezoid(begin, end, delta).apply(value));
+	public default FuzzyMembership scale(double v) {
+		return value -> apply(value / v);
 	}
 
-	public static FuzzyMembership line(double begin, double end) {
-		return value -> FuzzyValue.of(FuzzyMath.line(begin, end).apply(value));
+	public static FuzzyMembership triangle() {
+		return value -> FuzzyValue.of(FuzzyMath.triangle(-0.5, 0.5).apply(value));
 	}
+
+//	public static FuzzyMembership triangle(double begin, double end) {
+//		return value -> FuzzyValue.of(FuzzyMath.triangle(begin, end).apply(value));
+//	}
+
+//	public static FuzzyMembership trapezoid(double begin, double end, double delta) {
+//		return value -> FuzzyValue.of(FuzzyMath.trapezoid(begin, end, delta).apply(value));
+//	}
+//
+//	public static FuzzyMembership line(double begin, double end) {
+//		return value -> FuzzyValue.of(FuzzyMath.line(begin, end).apply(value));
+//	}
 
 	public static FuzzyMembership inverse(FuzzyMembership membership) {
 		return value -> FuzzyValue.of(1 - membership.apply(value).get());
