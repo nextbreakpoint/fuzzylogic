@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class FuzzyPlayground extends Application {
     private static final int FRAME_LENGTH_IN_MILLIS = 20;
     private static final int FRAMES = 1000 / FRAME_LENGTH_IN_MILLIS;
+    public static final String INPUT_0 = "input0";
+    public static final String OUTPUT_0 = "output0";
     private GraphSource inputSource1;
     private GraphSource outputSource1;
     private FuzzySystem system;
@@ -75,11 +77,9 @@ public class FuzzyPlayground extends Application {
         inputGraphPane.widthProperty().bind(main.widthProperty());
         outputGraphPane.widthProperty().bind(main.widthProperty());
 
-        inputs.put("input0", inRange.min() + 0.5 * (inRange.max() - inRange.min()));
+        inputs.put(INPUT_0, getValue(0.5));
 
-        inputGraphPane.getValueProperty().addListener((observable, oldValue, newValue) -> {
-            inputs.put("input0", inRange.min() + clampValue(newValue) * (inRange.max() - inRange.min()));
-        });
+        inputGraphPane.getValueProperty().addListener((observable, oldValue, newValue) -> inputs.put(INPUT_0, getValue(newValue)));
 
         primaryStage.setOnCloseRequest(e -> timer.stop());
 
@@ -87,7 +87,11 @@ public class FuzzyPlayground extends Application {
         timer.start();
     }
 
-    public AnimationTimer createAnimationTimer() {
+    private double getValue(Double newValue) {
+        return inRange.min() + clampValue(newValue) * (inRange.max() - inRange.min());
+    }
+
+    private AnimationTimer createAnimationTimer() {
         return new AnimationTimer() {
             private long last;
 
@@ -108,8 +112,8 @@ public class FuzzyPlayground extends Application {
 
     private void update() {
         Map<String, Double> outputs = system.evaluate(inputs);
-        double input0 = inputs.get("input0");
-        double output0 = outputs.get("output0");
+        double input0 = inputs.get(INPUT_0);
+        double output0 = outputs.get(OUTPUT_0);
         inputSource1.update(time, input0);
         outputSource1.update(time, output0);
         inputGraphPane.setValue(input0);
@@ -120,19 +124,19 @@ public class FuzzyPlayground extends Application {
     }
 
     private void initSystem() {
-        FuzzyRange inBaseRange = FuzzyRange.of(-1, 1).scale(2);
-        FuzzyRange outBaseRange = FuzzyRange.of(-1, 1).scale(2);
-        FuzzyVariable inVar1 = FuzzyVariable.of("input0", inBaseRange.translate(-2.0));
-        FuzzyVariable inVar2 = FuzzyVariable.of("input0", inBaseRange.translate(+2.0));
-        FuzzyVariable outVar1 = FuzzyVariable.of("output0", outBaseRange.translate(-2.0));
-        FuzzyVariable outVar2 = FuzzyVariable.of("output0", outBaseRange.translate(+2.0));
+        FuzzyRange inBaseRange = FuzzyRange.of(-0.5, 0.5).scale(6);
+        FuzzyRange outBaseRange = FuzzyRange.of(-0.5, 0.5).scale(6);
+        FuzzyVariable inVar1 = FuzzyVariable.of(INPUT_0, inBaseRange.translate(-2.5));
+        FuzzyVariable inVar2 = FuzzyVariable.of(INPUT_0, inBaseRange.translate(+2.5));
+        FuzzyVariable outVar1 = FuzzyVariable.of(OUTPUT_0, outBaseRange.translate(-3.0));
+        FuzzyVariable outVar2 = FuzzyVariable.of(OUTPUT_0, outBaseRange.translate(+3.0));
         FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(inVar1), FuzzyInference.of(outVar1));
         FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(inVar2), FuzzyInference.of(outVar2));
         system = FuzzySystem.empty().addRule(rule1).addRule(rule2);
         inRange = FuzzyRange.of(-5, 5);
         outRange = FuzzyRange.of(-5, 5);
-        inputSource1 = new GraphSource("input0", FRAMES, inRange);
-        outputSource1 = new GraphSource("output0", FRAMES, outRange);
+        inputSource1 = new GraphSource(INPUT_0, FRAMES, inRange);
+        outputSource1 = new GraphSource(OUTPUT_0, FRAMES, outRange);
         inputs = new HashMap<>();
     }
 

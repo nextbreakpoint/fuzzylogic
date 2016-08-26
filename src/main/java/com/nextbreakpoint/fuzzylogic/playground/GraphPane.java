@@ -38,6 +38,22 @@ public class GraphPane extends Canvas {
         return valueProperty;
     }
 
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public Color getLineColor() {
+        return lineColor;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
     public void redraw() {
         transform = AffineTransform.getScaleInstance(getWidth() / (frames - 1), getHeight());
         GraphicsContext g2d = getGraphicsContext2D();
@@ -61,21 +77,5 @@ public class GraphPane extends Canvas {
     private Point2D convertPoint(Point2D point, double origin) {
         Point2D.Double newPoint = new Point2D.Double(point.getX() - origin, 1 - point.getY());
         return transform.transform(newPoint, newPoint);
-    }
-
-    public void setLineColor(Color lineColor) {
-        this.lineColor = lineColor;
-    }
-
-    public Color getLineColor() {
-        return lineColor;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
     }
 }
