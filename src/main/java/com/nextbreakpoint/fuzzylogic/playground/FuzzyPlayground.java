@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class FuzzyPlayground extends Application {
     private static final int FRAME_LENGTH_IN_MILLIS = 20;
     private static final int FRAMES = 1000 / FRAME_LENGTH_IN_MILLIS;
-    private FuzzyGraphSource inputSource1;
-    private FuzzyGraphSource outputSource1;
+    private GraphSource inputSource1;
+    private GraphSource outputSource1;
     private FuzzySystem system;
     private Stage primaryStage;
     private FuzzyRange inRange;
@@ -131,8 +131,8 @@ public class FuzzyPlayground extends Application {
         system = FuzzySystem.empty().addRule(rule1).addRule(rule2);
         inRange = FuzzyRange.of(-5, 5);
         outRange = FuzzyRange.of(-5, 5);
-        inputSource1 = new FuzzyGraphSource("input0", inRange, FRAMES);
-        outputSource1 = new FuzzyGraphSource("output0", outRange, FRAMES);
+        inputSource1 = new GraphSource("input0", FRAMES, inRange);
+        outputSource1 = new GraphSource("output0", FRAMES, outRange);
         inputs = new HashMap<>();
     }
 
