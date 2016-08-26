@@ -1,8 +1,8 @@
 package com.nextbreakpoint.fuzzylogic.playground;
 
 import com.nextbreakpoint.fuzzylogic.*;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -12,12 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class FuzzyPlayground extends Application {
-    public static final int FRAMES = 100;
+    private static final int FRAME_LENGTH_IN_MILLIS = 50;
+    private static final int FRAMES = 100;
     private FuzzyGraphSource inputSource1;
     private FuzzyGraphSource outputSource1;
     private FuzzySystem system;
@@ -27,6 +26,8 @@ public class FuzzyPlayground extends Application {
     private int time;
     private GraphPane inputGraphPane;
     private GraphPane outputGraphPane;
+    private Map<String, Double> inputs;
+    private AnimationTimer timer;
 
     @Override
     public void start(Stage primaryStage) {
@@ -43,20 +44,17 @@ public class FuzzyPlayground extends Application {
         List<GraphSource> inputSources = new ArrayList<>();
         List<GraphSource> outputSources = new ArrayList<>();
 
-        DummyGraphSource inputSource0 = new DummyGraphSource(FRAMES);
-        DummyGraphSource outputSource0 = new DummyGraphSource(FRAMES);
-
         inputSources.add(inputSource1);
         outputSources.add(outputSource1);
 
-        inputGraphPane = new GraphPane(inputSources, FRAMES, 10, TimeUnit.MILLISECONDS);
-        outputGraphPane = new GraphPane(outputSources, FRAMES, 10, TimeUnit.MILLISECONDS);
+        inputGraphPane = new GraphPane(inputSources, FRAMES, FRAME_LENGTH_IN_MILLIS, TimeUnit.MILLISECONDS);
+        outputGraphPane = new GraphPane(outputSources, FRAMES, FRAME_LENGTH_IN_MILLIS, TimeUnit.MILLISECONDS);
 
         inputGraphPane.setWidth(primaryStage.getWidth());
-        inputGraphPane.setHeight(primaryStage.getHeight() / 4);
+        inputGraphPane.setHeight(primaryStage.getHeight() / 2);
 
         outputGraphPane.setWidth(primaryStage.getWidth());
-        outputGraphPane.setHeight(primaryStage.getHeight() / 4);
+        outputGraphPane.setHeight(primaryStage.getHeight() / 2);
 
         main.getChildren().add(inputGraphPane);
         main.getChildren().add(outputGraphPane);
@@ -72,25 +70,39 @@ public class FuzzyPlayground extends Application {
         inputGraphPane.widthProperty().bind(main.widthProperty());
         outputGraphPane.widthProperty().bind(main.widthProperty());
 
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(this::update, 0, 100, TimeUnit.MILLISECONDS);
+        inputs.put("input0", inRange.min() + 0.5 * (inRange.max() - inRange.min()));
 
-        primaryStage.setOnCloseRequest(e -> executor.shutdown());
+        inputGraphPane.getValueProperty().addListener((observable, oldValue, newValue) -> {
+            inputs.put("input0", inRange.min() + newValue * (inRange.max() - inRange.min()));
+        });
+
+        primaryStage.setOnCloseRequest(e -> timer.stop());
+
+        timer = new AnimationTimer() {
+            private long last;
+
+            @Override
+            public void handle(long now) {
+                long time = now / 1000000;
+                if ((time - last) > FRAME_LENGTH_IN_MILLIS) {
+                    update();
+                    last = time;
+                }
+            }
+        };
+
+        timer.start();
     }
 
     private void update() {
-        double input0 = Math.random() * (inRange.max() - inRange.min());
-        Map<String, Double> inputs = new HashMap<>();
-        inputs.put("input0", input0);
         Map<String, Double> outputs = system.evaluate(inputs);
+        double input0 = inputs.get("input0");
         double output0 = outputs.get("output0");
+        inputSource1.update(time, input0);
+        outputSource1.update(time, output0);
+        inputGraphPane.redraw();
+        outputGraphPane.redraw();
         time += 1;
-        Platform.runLater(() -> {
-            inputSource1.update(time, input0);
-            outputSource1.update(time, output0);
-            inputGraphPane.redraw();
-            outputGraphPane.redraw();
-        });
     }
 
     private void initSystem() {
@@ -107,6 +119,7 @@ public class FuzzyPlayground extends Application {
         outRange = FuzzyRange.of(0, 5);
         inputSource1 = new FuzzyGraphSource("input0", inRange, FRAMES);
         outputSource1 = new FuzzyGraphSource("output0", outRange, FRAMES);
+        inputs = new HashMap<>();
     }
 
     public static void main(String[] args) {

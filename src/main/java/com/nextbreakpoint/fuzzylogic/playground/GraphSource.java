@@ -7,7 +7,7 @@ import java.util.List;
 public class GraphSource {
     private List<Point2D.Double> points = new ArrayList<>();
     private double origin = 0;
-    private int frames = 100;
+    private int frames = 0;
 
     public GraphSource(int frames) {
         this.frames = frames;
@@ -22,11 +22,11 @@ public class GraphSource {
     }
 
     protected void addPoint(Point2D.Double point) {
-        if (points.size() >= frames) {
+        if (points.size() > frames) {
             points.remove(0);
             origin = points.get(0).getX();
-            points.stream().forEach(p -> p.setLocation(p.getX() - origin, p.getY()));
         }
         points.add(point);
+        points.stream().forEach(p -> p.setLocation(p.getX() - origin, p.getY()));
     }
 }

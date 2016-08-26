@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -16,26 +18,36 @@ public class GraphPane extends Canvas {
     private int frames;
     private int duration;
     private TimeUnit unit;
+    private ObjectProperty<Double> valueProperty = new SimpleObjectProperty();
 
     public GraphPane(List<GraphSource> sources, int frames, int duration, TimeUnit unit) {
+        Objects.requireNonNull(sources);
+        this.sources = sources;
         this.frames = frames;
         this.duration = duration;
         this.unit = unit;
-        Objects.requireNonNull(sources);
-        this.sources = sources;
         widthProperty().addListener(v -> redraw());
         heightProperty().addListener(v -> redraw());
+        onMouseClickedProperty().setValue(event -> valueProperty.setValue(event.getY() / getHeight()));
+        onMouseDraggedProperty().setValue(event -> valueProperty.setValue(event.getY() / getHeight()));
+    }
+
+    public ObjectProperty<Double> getValueProperty() {
+        return valueProperty;
     }
 
     public void redraw() {
         transform = AffineTransform.getScaleInstance(getWidth() / (frames - 1), getHeight());
         GraphicsContext g2d = getGraphicsContext2D();
+        g2d.save();
         g2d.setFill(Color.GRAY);
         g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.beginPath();
         sources.stream().forEach(source -> drawSource(source));
         g2d.setStroke(Color.YELLOW);
         g2d.setLineWidth(2);
         g2d.stroke();
+        g2d.restore();
     }
 
     private void drawSource(GraphSource source) {
