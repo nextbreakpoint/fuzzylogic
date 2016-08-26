@@ -51,10 +51,14 @@ public class FuzzySystemTest {
 	}
 
 	private FuzzySystem createFuzzySystem() {
-		FuzzyDomain domainIn = FuzzyDomain.of(-0.5, 0.5).scale(4);
-		FuzzyDomain domainOut = FuzzyDomain.of(-0.5, 0.5).scale(2);
-		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", domainIn.translate(-0.5))), FuzzyInference.of(FuzzyVariable.of("output", domainOut.translate(-0.2))));
-		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", domainIn.translate(+0.5))), FuzzyInference.of(FuzzyVariable.of("output", domainOut.translate(+0.8))));
+		FuzzyRange inBaseRange = FuzzyRange.of(-0.5, 0.5).scale(4);
+		FuzzyRange outBaseRange = FuzzyRange.of(-0.5, 0.5).scale(2);
+		FuzzyVariable inVar1 = FuzzyVariable.of("input", inBaseRange.translate(-0.5));
+		FuzzyVariable inVar2 = FuzzyVariable.of("input", inBaseRange.translate(+0.5));
+		FuzzyVariable outVar1 = FuzzyVariable.of("output", outBaseRange.translate(-0.2));
+		FuzzyVariable outVar2 = FuzzyVariable.of("output", outBaseRange.translate(+0.8));
+		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(inVar1), FuzzyInference.of(outVar1));
+		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(inVar2), FuzzyInference.of(outVar2));
 		return system.addRule(rule1).addRule(rule2);
 	}
 
