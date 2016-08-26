@@ -36,6 +36,7 @@ public class FuzzyPlayground extends Application {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("FuzzyPlayground");
+        this.primaryStage.setResizable(true);
 
         VBox main = new VBox(10);
 
@@ -67,7 +68,7 @@ public class FuzzyPlayground extends Application {
 
         root.setCenter(main);
 
-        Scene scene = new Scene(root, 800, 800, Color.DARKGREY);
+        Scene scene = new Scene(root, Color.BLACK);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -82,7 +83,12 @@ public class FuzzyPlayground extends Application {
 
         primaryStage.setOnCloseRequest(e -> timer.stop());
 
-        timer = new AnimationTimer() {
+        timer = createAnimationTimer();
+        timer.start();
+    }
+
+    public AnimationTimer createAnimationTimer() {
+        return new AnimationTimer() {
             private long last;
 
             @Override
@@ -94,8 +100,6 @@ public class FuzzyPlayground extends Application {
                 }
             }
         };
-
-        timer.start();
     }
 
     private double clampValue(Double value) {
