@@ -4,8 +4,11 @@ import com.nextbreakpoint.fuzzylogic.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -15,8 +18,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class FuzzyPlayground extends Application {
-    private static final int FRAME_LENGTH_IN_MILLIS = 50;
-    private static final int FRAMES = 100;
+    private static final int FRAME_LENGTH_IN_MILLIS = 20;
+    private static final int FRAMES = 1000 / FRAME_LENGTH_IN_MILLIS;
     private FuzzyGraphSource inputSource1;
     private FuzzyGraphSource outputSource1;
     private FuzzySystem system;
@@ -50,11 +53,14 @@ public class FuzzyPlayground extends Application {
         inputGraphPane = new GraphPane(inputSources, FRAMES, FRAME_LENGTH_IN_MILLIS, TimeUnit.MILLISECONDS);
         outputGraphPane = new GraphPane(outputSources, FRAMES, FRAME_LENGTH_IN_MILLIS, TimeUnit.MILLISECONDS);
 
+        inputGraphPane.setLineColor(Color.LIGHTGREEN);
+        outputGraphPane.setLineColor(Color.LIGHTBLUE);
+
         inputGraphPane.setWidth(primaryStage.getWidth());
-        inputGraphPane.setHeight(primaryStage.getHeight() / 2);
+        inputGraphPane.setHeight(primaryStage.getHeight() / 2 - 5);
 
         outputGraphPane.setWidth(primaryStage.getWidth());
-        outputGraphPane.setHeight(primaryStage.getHeight() / 2);
+        outputGraphPane.setHeight(primaryStage.getHeight() / 2 - 5);
 
         main.getChildren().add(inputGraphPane);
         main.getChildren().add(outputGraphPane);
@@ -63,7 +69,7 @@ public class FuzzyPlayground extends Application {
 
         root.setCenter(main);
 
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 800, 800, Color.DARKGREY);
         primaryStage.setScene(scene);
         primaryStage.show();
 

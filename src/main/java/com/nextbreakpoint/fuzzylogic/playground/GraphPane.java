@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 public class GraphPane extends Canvas {
     private List<GraphSource> sources;
     private AffineTransform transform;
+    private Color lineColor;
     private int frames;
     private int duration;
     private TimeUnit unit;
@@ -43,19 +44,29 @@ public class GraphPane extends Canvas {
         g2d.setFill(Color.GRAY);
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.beginPath();
+        g2d.setStroke(getLineColor());
         sources.stream().forEach(source -> drawSource(source));
-        g2d.setStroke(Color.YELLOW);
         g2d.setLineWidth(2);
         g2d.stroke();
         g2d.restore();
     }
 
     private void drawSource(GraphSource source) {
-        source.points().stream().findFirst().map(point -> convertPoint(point)).ifPresent(point -> getGraphicsContext2D().moveTo(point.getX(), point.getY()));
-        source.points().stream().map(point -> convertPoint(point)).forEach(point -> getGraphicsContext2D().lineTo(point.getX(), point.getY()));
+        getGraphicsContext2D().strokeText(source.getName(), 20, 20);
+        source.points().stream().findFirst().map(point -> convertPoint(point, source.getOrigin())).ifPresent(point -> getGraphicsContext2D().moveTo(point.getX(), point.getY()));
+        source.points().stream().map(point -> convertPoint(point, source.getOrigin())).forEach(point -> getGraphicsContext2D().lineTo(point.getX(), point.getY()));
     }
 
-    private Point2D convertPoint(Point2D point) {
-        return transform.transform(point, new Point2D.Double());
+    private Point2D convertPoint(Point2D point, double origin) {
+        Point2D.Double newPoint = new Point2D.Double(point.getX() - origin, point.getY());
+        return transform.transform(newPoint, newPoint);
+    }
+
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public Color getLineColor() {
+        return lineColor;
     }
 }
