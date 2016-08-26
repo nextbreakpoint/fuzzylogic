@@ -4,8 +4,6 @@ import com.nextbreakpoint.fuzzylogic.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -79,7 +77,7 @@ public class FuzzyPlayground extends Application {
         inputs.put("input0", inRange.min() + 0.5 * (inRange.max() - inRange.min()));
 
         inputGraphPane.getValueProperty().addListener((observable, oldValue, newValue) -> {
-            inputs.put("input0", inRange.min() + newValue * (inRange.max() - inRange.min()));
+            inputs.put("input0", inRange.min() + clampValue(newValue) * (inRange.max() - inRange.min()));
         });
 
         primaryStage.setOnCloseRequest(e -> timer.stop());
@@ -100,29 +98,35 @@ public class FuzzyPlayground extends Application {
         timer.start();
     }
 
+    private double clampValue(Double value) {
+        return value < 0 ? 0 : value > 1 ? 1 : value;
+    }
+
     private void update() {
         Map<String, Double> outputs = system.evaluate(inputs);
         double input0 = inputs.get("input0");
         double output0 = outputs.get("output0");
         inputSource1.update(time, input0);
         outputSource1.update(time, output0);
+        inputGraphPane.setValue(input0);
+        outputGraphPane.setValue(output0);
         inputGraphPane.redraw();
         outputGraphPane.redraw();
         time += 1;
     }
 
     private void initSystem() {
-        FuzzyRange inBaseRange = FuzzyRange.of(0, 1).scale(4);
-        FuzzyRange outBaseRange = FuzzyRange.of(0, 1).scale(4);
-        FuzzyVariable inVar1 = FuzzyVariable.of("input0", inBaseRange.translate(-1.0));
-        FuzzyVariable inVar2 = FuzzyVariable.of("input0", inBaseRange.translate(+1.0));
-        FuzzyVariable outVar1 = FuzzyVariable.of("output0", outBaseRange.translate(-2));
-        FuzzyVariable outVar2 = FuzzyVariable.of("output0", outBaseRange.translate(+2));
+        FuzzyRange inBaseRange = FuzzyRange.of(-1, 1).scale(2);
+        FuzzyRange outBaseRange = FuzzyRange.of(-1, 1).scale(2);
+        FuzzyVariable inVar1 = FuzzyVariable.of("input0", inBaseRange.translate(-2.0));
+        FuzzyVariable inVar2 = FuzzyVariable.of("input0", inBaseRange.translate(+2.0));
+        FuzzyVariable outVar1 = FuzzyVariable.of("output0", outBaseRange.translate(-2.0));
+        FuzzyVariable outVar2 = FuzzyVariable.of("output0", outBaseRange.translate(+2.0));
         FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(inVar1), FuzzyInference.of(outVar1));
         FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(inVar2), FuzzyInference.of(outVar2));
         system = FuzzySystem.empty().addRule(rule1).addRule(rule2);
-        inRange = FuzzyRange.of(0, 10);
-        outRange = FuzzyRange.of(0, 5);
+        inRange = FuzzyRange.of(-5, 5);
+        outRange = FuzzyRange.of(-5, 5);
         inputSource1 = new FuzzyGraphSource("input0", inRange, FRAMES);
         outputSource1 = new FuzzyGraphSource("output0", outRange, FRAMES);
         inputs = new HashMap<>();

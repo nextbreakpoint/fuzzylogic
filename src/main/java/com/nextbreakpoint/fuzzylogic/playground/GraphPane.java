@@ -19,6 +19,7 @@ public class GraphPane extends Canvas {
     private int frames;
     private int duration;
     private TimeUnit unit;
+    private double value;
     private ObjectProperty<Double> valueProperty = new SimpleObjectProperty();
 
     public GraphPane(List<GraphSource> sources, int frames, int duration, TimeUnit unit) {
@@ -29,8 +30,8 @@ public class GraphPane extends Canvas {
         this.unit = unit;
         widthProperty().addListener(v -> redraw());
         heightProperty().addListener(v -> redraw());
-        onMouseClickedProperty().setValue(event -> valueProperty.setValue(event.getY() / getHeight()));
-        onMouseDraggedProperty().setValue(event -> valueProperty.setValue(event.getY() / getHeight()));
+        onMouseClickedProperty().setValue(event -> valueProperty.setValue(1 - event.getY() / getHeight()));
+        onMouseDraggedProperty().setValue(event -> valueProperty.setValue(1 - event.getY() / getHeight()));
     }
 
     public ObjectProperty<Double> getValueProperty() {
@@ -52,13 +53,13 @@ public class GraphPane extends Canvas {
     }
 
     private void drawSource(GraphSource source) {
-        getGraphicsContext2D().strokeText(source.getName(), 20, 20);
+        getGraphicsContext2D().strokeText(String.format("%s %.2f", source.getName(), value), 20, 20);
         source.points().stream().findFirst().map(point -> convertPoint(point, source.getOrigin())).ifPresent(point -> getGraphicsContext2D().moveTo(point.getX(), point.getY()));
         source.points().stream().map(point -> convertPoint(point, source.getOrigin())).forEach(point -> getGraphicsContext2D().lineTo(point.getX(), point.getY()));
     }
 
     private Point2D convertPoint(Point2D point, double origin) {
-        Point2D.Double newPoint = new Point2D.Double(point.getX() - origin, point.getY());
+        Point2D.Double newPoint = new Point2D.Double(point.getX() - origin, 1 - point.getY());
         return transform.transform(newPoint, newPoint);
     }
 
@@ -68,5 +69,13 @@ public class GraphPane extends Canvas {
 
     public Color getLineColor() {
         return lineColor;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 }
