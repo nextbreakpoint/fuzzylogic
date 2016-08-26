@@ -29,8 +29,12 @@ public class FuzzyVariable implements FuzzyExpression {
 		return membership;
 	}
 
-	public static FuzzyVariable of(String name, FuzzyDomain domain, FuzzyMembership membership) {
-		return new FuzzyVariable(name, domain, membership);
+	public static FuzzyVariable of(String name, FuzzyDomain domain) {
+		return new FuzzyVariable(name, domain, FuzzyMembership.triangle().scale(domain.max() - domain.min()).translate(domain.center()));
+	}
+
+	public static FuzzyVariable of(String name, FuzzyDomain domain, FuzzyValue limit) {
+		return new FuzzyVariable(name, domain, FuzzyMembership.triangle().scale(domain.max() - domain.min()).translate(domain.center()).limit(limit));
 	}
 
 	@Override

@@ -25,38 +25,36 @@ public class FuzzySystemTest {
 
 	@Test
 	public void should_return_number_of_rules_is_two_when_system_has_two_rules() {
-		FuzzySystem fuzzySystem = getFuzzySystem();
+		FuzzySystem fuzzySystem = createFuzzySystem();
 		assertEquals(2, fuzzySystem.numberOfRules());
 	}
 
 	@Test
 	public void should_return_map_with_same_size_as_number_of_outputs() {
-		FuzzySystem fuzzySystem = getFuzzySystem().withSteps(25);
+		FuzzySystem fuzzySystem = createFuzzySystem().withSteps(25);
 		Map<String, Double> outputs = fuzzySystem.evaluate(createInputs0());
 		assertEquals(1, outputs.size());
 	}
 
 	@Test
 	public void should_return_value_when_input_activates_rule_1() {
-		FuzzySystem fuzzySystem = getFuzzySystem().withSteps(25);
+		FuzzySystem fuzzySystem = createFuzzySystem().withSteps(25);
 		Map<String, Double> outputs = fuzzySystem.evaluate(createInputs1());
-		assertEquals(-0.5 + 0.3, outputs.get("output"), PRECISION);
+		assertEquals(-0.2, outputs.get("output"), PRECISION);
 	}
 
 	@Test
 	public void should_return_value_when_input_activates_rule_2() {
-		FuzzySystem fuzzySystem = getFuzzySystem().withSteps(25);
+		FuzzySystem fuzzySystem = createFuzzySystem().withSteps(25);
 		Map<String, Double> outputs = fuzzySystem.evaluate(createInputs2());
-		assertEquals(0.5 + 0.3, outputs.get("output"), PRECISION);
+		assertEquals(+0.8, outputs.get("output"), PRECISION);
 	}
 
-	private FuzzySystem getFuzzySystem() {
-		FuzzyMembership fuzzyMembershipIn1 = FuzzyMembership.triangle().scale(4).translate(-0.5);
-		FuzzyMembership fuzzyMembershipIn2 = FuzzyMembership.triangle().scale(4).translate(+0.5);
-		FuzzyMembership fuzzyMembershipOut1 = FuzzyMembership.triangle().scale(2).translate(-0.2);
-		FuzzyMembership fuzzyMembershipOut2 = FuzzyMembership.triangle().scale(2).translate(+0.8);
-		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(-2.5, 1.5), fuzzyMembershipIn1)), FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(-1.5 + 0.3, 0.5 + 0.3), fuzzyMembershipOut1)));
-		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(-1.5, 2.5), fuzzyMembershipIn2)), FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(-0.5 + 0.3, 1.5 + 0.3), fuzzyMembershipOut2)));
+	private FuzzySystem createFuzzySystem() {
+		FuzzyDomain domainIn = FuzzyDomain.of(-0.5, 0.5).scale(4);
+		FuzzyDomain domainOut = FuzzyDomain.of(-0.5, 0.5).scale(2);
+		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", domainIn.translate(-0.5))), FuzzyInference.of(FuzzyVariable.of("output", domainOut.translate(-0.2))));
+		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", domainIn.translate(+0.5))), FuzzyInference.of(FuzzyVariable.of("output", domainOut.translate(+0.8))));
 		return system.addRule(rule1).addRule(rule2);
 	}
 

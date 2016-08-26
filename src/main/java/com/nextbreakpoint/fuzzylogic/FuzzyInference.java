@@ -18,10 +18,10 @@ public class FuzzyInference {
 		return variables.length;
 	}
 
-	public FuzzyVariable[] apply(FuzzyValue value) {
+	public FuzzyVariable[] apply(FuzzyValue limit) {
 		FuzzyVariable[] outputs = new FuzzyVariable[variables.length];
 		for (int i = 0; i < variables.length; i++) {
-			outputs[i] = FuzzyVariable.of(variables[i].name(), variables[i].domain(), variables[i].membership().limit(value));
+			outputs[i] = FuzzyVariable.of(variables[i].name(), variables[i].domain(), limit);
 		}
 		return outputs;
 	}

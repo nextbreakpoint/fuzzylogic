@@ -23,18 +23,14 @@ public class FuzzyPredicateTest {
 
 	@Test
 	public void should_return_value_when_expression_is_AND_of_triangle_sets() {
-		FuzzyMembership fuzzyMembershipA = FuzzyMembership.triangle().scale(2).translate(-0.5);
-		FuzzyMembership fuzzyMembershipB = FuzzyMembership.triangle().scale(2).translate(+0.5);
-		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.and(FuzzyVariable.of("test", FuzzyDomain.of(-1.5, 1.5), fuzzyMembershipA), FuzzyVariable.of("test", FuzzyDomain.of(-1.5, 1.5), fuzzyMembershipB));
+		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.and(FuzzyVariable.of("test", FuzzyDomain.of(-1.5, 0.5)), FuzzyVariable.of("test", FuzzyDomain.of(-0.5, 1.5)));
 		FuzzyValue value = fuzzyPredicate.evaluate(getInputs());
 		assertEquals(0.25, value.get(), PRECISION);
 	}
 
 	@Test
 	public void should_return_value_when_expression_is_OR_of_triangle_sets() {
-		FuzzyMembership fuzzyMembershipA = FuzzyMembership.triangle().scale(2).translate(-0.5);
-		FuzzyMembership fuzzyMembershipB = FuzzyMembership.triangle().scale(2).translate(+0.5);
-		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.or(FuzzyVariable.of("test", FuzzyDomain.of(-1.5, 1.5), fuzzyMembershipA), FuzzyVariable.of("test", FuzzyDomain.of(-1.5, 1.5), fuzzyMembershipB));
+		FuzzyPredicate fuzzyPredicate = FuzzyPredicate.or(FuzzyVariable.of("test", FuzzyDomain.of(-1.5, 0.5)), FuzzyVariable.of("test", FuzzyDomain.of(-0.5, 1.5)));
 		FuzzyValue value = fuzzyPredicate.evaluate(getInputs());
 		assertEquals(0.75, value.get(), PRECISION);
 	}

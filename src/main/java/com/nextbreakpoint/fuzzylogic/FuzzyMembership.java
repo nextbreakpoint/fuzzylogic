@@ -28,6 +28,13 @@ public interface FuzzyMembership {
 			yDen += y;
 			x += dx;
 		}
+		if (yNum == 0) {
+			return 0;
+		}
+		if (yDen == 0) {
+			// it should never happen
+			throw  new IllegalStateException();
+		}
 		return yNum / yDen;
 	}
 

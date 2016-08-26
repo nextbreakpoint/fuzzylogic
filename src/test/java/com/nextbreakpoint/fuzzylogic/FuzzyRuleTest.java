@@ -42,8 +42,8 @@ public class FuzzyRuleTest {
 
 	@Test
 	public void should_return_one_set_when_number_of_inputs_is_one() {
-		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1), FuzzyMembership.constant(1.0)));
-		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1), FuzzyMembership.constant(0.5)));
+		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1)));
+		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
 		FuzzyVariable[] variables = rule.evaluate(getInputs());
 		assertEquals(1, variables.length);
@@ -51,8 +51,8 @@ public class FuzzyRuleTest {
 
 	@Test
 	public void should_return_name_when_number_of_outputs_is_one() {
-		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1), FuzzyMembership.constant(1.0)));
-		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1), FuzzyMembership.constant(0.5)));
+		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1)));
+		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
 		FuzzyVariable[] variables = rule.evaluate(getInputs());
 		assertEquals("output", variables[0].name());
@@ -60,20 +60,20 @@ public class FuzzyRuleTest {
 
 	@Test
 	public void should_return_value_when_expression_is_not_limiting_output() {
-		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1), FuzzyMembership.constant(0.5)));
-		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1), FuzzyMembership.constant(0.3)));
+		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1).translate(-0.10)));
+		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1).translate(-0.15)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
 		FuzzyVariable[] variables = rule.evaluate(getInputs());
-		assertEquals(0.3, variables[0].membership().apply(0).get(), PRECISION);
+		assertEquals(0.7, variables[0].membership().apply(0.5).get(), PRECISION);
 	}
 
 	@Test
 	public void should_return_limit_value_when_expression_is_limiting_output() {
-		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1), FuzzyMembership.constant(0.5)));
-		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1), FuzzyMembership.constant(0.8)));
+		FuzzyPredicate when = FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(0, 1).translate(-0.10)));
+		FuzzyInference then = FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(0, 1).translate(-0.15)));
 		FuzzyRule rule = FuzzyRule.of(when, then);
 		FuzzyVariable[] variables = rule.evaluate(getInputs());
-		assertEquals(0.5, variables[0].membership().apply(0).get(), PRECISION);
+		assertEquals(0.8, variables[0].membership().apply(0.5 - 0.15).get(), PRECISION);
 	}
 
 	@Test

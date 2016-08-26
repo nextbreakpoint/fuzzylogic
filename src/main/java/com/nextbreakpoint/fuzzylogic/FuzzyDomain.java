@@ -28,4 +28,16 @@ public class FuzzyDomain {
     public static FuzzyDomain merge(FuzzyDomain left, FuzzyDomain right) {
         return FuzzyDomain.of(Math.min(left.min(), right.min()), Math.max(left.max(), right.max()));
     }
+
+    public FuzzyDomain translate(double v) {
+        return new FuzzyDomain(min + v, max + v);
+    }
+
+    public FuzzyDomain scale(double v) {
+        return new FuzzyDomain(min * v, max * v);
+    }
+
+    public double center() {
+        return (max + min) / 2;
+    }
 }
