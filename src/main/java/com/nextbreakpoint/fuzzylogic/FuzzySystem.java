@@ -46,41 +46,44 @@ public class FuzzySystem {
 	}
 
 	private Collector<FuzzyVariable[], Map<String, Pair<FuzzyDomain, List<FuzzyMembership>>>, Map<String, Double>> collector() {
-		return Collector.of(() -> new HashMap<String, Pair<FuzzyDomain, List<FuzzyMembership>>>(),
+		return Collector.of(
+			() -> new HashMap<>(),
         	(map, vars) -> Arrays.stream(vars).forEach(var -> accumulate(map, var)),
         	(map1, map2) -> { map1.putAll(map2); return map1; },
-        	finisher());
+        	finisher()
+		);
 	}
 
 	private Function<Map<String, Pair<FuzzyDomain, List<FuzzyMembership>>>, Map<String, Double>> finisher() {
-		return map -> map.entrySet().stream().collect(() -> new HashMap<String, Double>(),
+		return map -> map.entrySet().stream().collect(
+			() -> new HashMap<String, Double>(),
 			(mapSets, entry) -> mapSets.put(entry.getKey(), centroid(entry.getValue())),
-			(map1, map2) -> map1.putAll(map2));
+			(map1, map2) -> map1.putAll(map2)
+		);
 	}
 
 	private double centroid(Pair<FuzzyDomain, List<FuzzyMembership>> pair) {
-		return FuzzyMembership.of(pair.right).centroid(pair.left.min(), pair.left.max(), steps);
+		return FuzzyMembership.of(pair.memberships).centroid(pair.domain.min(), pair.domain.max(), steps);
 	}
 
 	private void accumulate(Map<String, Pair<FuzzyDomain, List<FuzzyMembership>>> map, FuzzyVariable var) {
 		Pair<FuzzyDomain, List<FuzzyMembership>> pair = map.get(var.name());
 		if (pair == null) {
 			pair = new Pair(var.domain(), new LinkedList<>());
-			pair.right.add(var.membership());
 			map.put(var.name(), pair);
 		} else {
-			pair.left = FuzzyDomain.merge(pair.left, var.domain());
-			pair.right.add(var.membership());
+			pair.domain = FuzzyDomain.merge(pair.domain, var.domain());
 		}
+		pair.memberships.add(var.membership());
 	}
 
 	private class Pair<T,W> {
-		T left;
-		W right;
+		T domain;
+		W memberships;
 
-		public Pair(T left, W right) {
-			this.left = left;
-			this.right = right;
+		public Pair(T domain, W memberships) {
+			this.domain = domain;
+			this.memberships = memberships;
 		}
 	}
 }

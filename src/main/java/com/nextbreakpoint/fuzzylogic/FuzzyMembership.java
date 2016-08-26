@@ -31,15 +31,15 @@ public interface FuzzyMembership {
 	}
 
 	public static FuzzyMembership triangle(double begin, double end) {
-		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + ((end - begin) / 2) ? (value - begin) / ((end - begin) / 2) : value < end ? (end - value) / ((end - begin) / 2) : 0);
+		return value -> FuzzyValue.of(FuzzyMath.triangle(begin, end).apply(value));
 	}
 
 	public static FuzzyMembership trapezoid(double begin, double end, double delta) {
-		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end - delta ? 1 : value < end ? (end - value) / delta : 0);
+		return value -> FuzzyValue.of(FuzzyMath.trapezoid(begin, end, delta).apply(value));
 	}
 
-	public static FuzzyMembership linear(double begin, double end) {
-		return value -> FuzzyValue.of(value < begin ? 0 : value < end ? (value - begin) / (end - begin) : 1);
+	public static FuzzyMembership line(double begin, double end) {
+		return value -> FuzzyValue.of(FuzzyMath.line(begin, end).apply(value));
 	}
 
 	public static FuzzyMembership inverse(FuzzyMembership membership) {

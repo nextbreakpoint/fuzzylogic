@@ -55,8 +55,8 @@ public class FuzzySystemTest {
 		FuzzyMembership fuzzyMembershipIn2 = FuzzyMembership.triangle(-1.5, 2.5);
 		FuzzyMembership fuzzyMembershipOut1 = FuzzyMembership.triangle(-1.5 + 0.3, 0.5 + 0.3);
 		FuzzyMembership fuzzyMembershipOut2 = FuzzyMembership.triangle(-0.5 + 0.3, 1.5 + 0.3);
-		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(-4.5, 4.5), fuzzyMembershipIn1)), FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(-4.5, 4.5), fuzzyMembershipOut1)));
-		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(-4.5, 4.5), fuzzyMembershipIn2)), FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(-4.5, 4.5), fuzzyMembershipOut2)));
+		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(-2.5, 1.5), fuzzyMembershipIn1)), FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(-1.5 + 0.3, 0.5 + 0.3), fuzzyMembershipOut1)));
+		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", FuzzyDomain.of(-1.5, 2.5), fuzzyMembershipIn2)), FuzzyInference.of(FuzzyVariable.of("output", FuzzyDomain.of(-0.5 + 0.3, 1.5 + 0.3), fuzzyMembershipOut2)));
 		return system.addRule(rule1).addRule(rule2);
 	}
 
