@@ -3,6 +3,7 @@ package com.nextbreakpoint.fuzzylogic;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Function;
 
 @FunctionalInterface
 public interface FuzzyMembership {
@@ -27,20 +28,39 @@ public interface FuzzyMembership {
 			yDen += y;
 			x += dx;
 		}
+		if (yNum == 0) {
+			return 0;
+		}
+		if (yDen == 0) {
+			// it should never happen
+			throw  new IllegalStateException();
+		}
 		return yNum / yDen;
 	}
 
-	public static FuzzyMembership triangle(double begin, double end) {
-		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + ((end - begin) / 2) ? (value - begin) / ((end - begin) / 2) : value < end ? (end - value) / ((end - begin) / 2) : 0);
+	public default FuzzyMembership translate(double v) {
+		return value -> apply(value - v);
 	}
 
-	public static FuzzyMembership trapezoid(double begin, double end, double delta) {
-		return value -> FuzzyValue.of(value < begin ? 0 : value < begin + delta ? (value - begin) / delta : value < end - delta ? 1 : value < end ? (end - value) / delta : 0);
+	public default FuzzyMembership scale(double v) {
+		return value -> apply(value / v);
 	}
 
-	public static FuzzyMembership linear(double begin, double end) {
-		return value -> FuzzyValue.of(value < begin ? 0 : value < end ? (value - begin) / (end - begin) : 1);
+	public static FuzzyMembership triangle() {
+		return value -> FuzzyValue.of(FuzzyMath.triangle(-0.5, 0.5).apply(value));
 	}
+
+//	public static FuzzyMembership triangle(double begin, double end) {
+//		return value -> FuzzyValue.of(FuzzyMath.triangle(begin, end).apply(value));
+//	}
+
+//	public static FuzzyMembership trapezoid(double begin, double end, double delta) {
+//		return value -> FuzzyValue.of(FuzzyMath.trapezoid(begin, end, delta).apply(value));
+//	}
+//
+//	public static FuzzyMembership line(double begin, double end) {
+//		return value -> FuzzyValue.of(FuzzyMath.line(begin, end).apply(value));
+//	}
 
 	public static FuzzyMembership inverse(FuzzyMembership membership) {
 		return value -> FuzzyValue.of(1 - membership.apply(value).get());

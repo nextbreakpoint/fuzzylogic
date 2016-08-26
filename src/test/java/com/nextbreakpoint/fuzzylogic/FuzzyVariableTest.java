@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class FuzzyVariableTest {
 	@Rule
@@ -13,23 +14,28 @@ public class FuzzyVariableTest {
 	@Test
 	public void should_throw_exception_when_name_is_null() {
 		exception.expect(NullPointerException.class);
-		FuzzyVariable.of(null, FuzzyMembership.constant(0));
+		FuzzyVariable.of(null, FuzzyRange.of(-2.5, 2.5));
 	}
 
 	@Test
-	public void should_throw_exception_when_set_is_null() {
+	public void should_throw_exception_when_domain_is_null() {
 		exception.expect(NullPointerException.class);
 		FuzzyVariable.of("", null);
 	}
 
 	@Test
 	public void should_return_name() {
-		assertEquals("test", FuzzyVariable.of("test", FuzzyMembership.constant(0)).name());
+		assertEquals("test", FuzzyVariable.of("test", FuzzyRange.of(-2.5, 2.5)).name());
 	}
 
 	@Test
-	public void should_return_set() {
-		FuzzyMembership fuzzyMembership = FuzzyMembership.constant(0);
-		assertEquals(fuzzyMembership, FuzzyVariable.of("test", fuzzyMembership).membership());
+	public void should_return_domain() {
+		FuzzyRange fuzzyRange = FuzzyRange.of(-2.5, 2.5);
+		assertEquals(fuzzyRange, FuzzyVariable.of("test", fuzzyRange).domain());
+	}
+
+	@Test
+	public void should_return_membership() {
+		assertNotNull(FuzzyVariable.of("test", FuzzyRange.of(-2.5, 2.5)).membership());
 	}
 }

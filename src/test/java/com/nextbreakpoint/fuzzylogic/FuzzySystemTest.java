@@ -25,48 +25,56 @@ public class FuzzySystemTest {
 
 	@Test
 	public void should_return_number_of_rules_is_two_when_system_has_two_rules() {
-		FuzzySystem fuzzySystem = getFuzzySystem();
+		FuzzySystem fuzzySystem = createFuzzySystem();
 		assertEquals(2, fuzzySystem.numberOfRules());
 	}
 
 	@Test
-	public void should_return_array_with_same_size_as_number_of_outputs() {
-		FuzzySystem fuzzySystem = getFuzzySystem();
-		Map<String, Double> outputs = fuzzySystem.evaluate(getInputs1(), -1.5 + 0.3, 1.5 + 0.3, 25);
+	public void should_return_map_with_same_size_as_number_of_outputs() {
+		FuzzySystem fuzzySystem = createFuzzySystem().withSteps(25);
+		Map<String, Double> outputs = fuzzySystem.evaluate(createInputs0());
 		assertEquals(1, outputs.size());
 	}
 
 	@Test
 	public void should_return_value_when_input_activates_rule_1() {
-		FuzzySystem fuzzySystem = getFuzzySystem();
-		Map<String, Double> outputs = fuzzySystem.evaluate(getInputs1(), -1.5 + 0.3, 1.5 + 0.3, 25);
-		assertEquals(-0.5 + 0.3, outputs.get("output"), PRECISION);
+		FuzzySystem fuzzySystem = createFuzzySystem().withSteps(25);
+		Map<String, Double> outputs = fuzzySystem.evaluate(createInputs1());
+		assertEquals(-0.2, outputs.get("output"), PRECISION);
 	}
 
 	@Test
-	public void should_return_value_when_input_activates_rule_B() {
-		FuzzySystem fuzzySystem = getFuzzySystem();
-		Map<String, Double> outputs = fuzzySystem.evaluate(getInputs2(), -1.5 + 0.3, 1.5 + 0.3, 25);
-		assertEquals(0.5 + 0.3, outputs.get("output"), PRECISION);
+	public void should_return_value_when_input_activates_rule_2() {
+		FuzzySystem fuzzySystem = createFuzzySystem().withSteps(25);
+		Map<String, Double> outputs = fuzzySystem.evaluate(createInputs2());
+		assertEquals(+0.8, outputs.get("output"), PRECISION);
 	}
 
-	private FuzzySystem getFuzzySystem() {
-		FuzzyMembership fuzzyMembershipIn1 = FuzzyMembership.triangle(-2.5, 1.5);
-		FuzzyMembership fuzzyMembershipIn2 = FuzzyMembership.triangle(-1.5, 2.5);
-		FuzzyMembership fuzzyMembershipOut1 = FuzzyMembership.triangle(-1.5 + 0.3, 0.5 + 0.3);
-		FuzzyMembership fuzzyMembershipOut2 = FuzzyMembership.triangle(-0.5 + 0.3, 1.5 + 0.3);
-		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", fuzzyMembershipIn1)), FuzzyInference.of(FuzzyVariable.of("output", fuzzyMembershipOut1)));
-		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(FuzzyVariable.of("input", fuzzyMembershipIn2)), FuzzyInference.of(FuzzyVariable.of("output", fuzzyMembershipOut2)));
+	private FuzzySystem createFuzzySystem() {
+		FuzzyRange inBaseRange = FuzzyRange.of(-0.5, 0.5).scale(4);
+		FuzzyRange outBaseRange = FuzzyRange.of(-0.5, 0.5).scale(2);
+		FuzzyVariable inVar1 = FuzzyVariable.of("input", inBaseRange.translate(-0.5));
+		FuzzyVariable inVar2 = FuzzyVariable.of("input", inBaseRange.translate(+0.5));
+		FuzzyVariable outVar1 = FuzzyVariable.of("output", outBaseRange.translate(-0.2));
+		FuzzyVariable outVar2 = FuzzyVariable.of("output", outBaseRange.translate(+0.8));
+		FuzzyRule rule1 = FuzzyRule.of(FuzzyPredicate.of(inVar1), FuzzyInference.of(outVar1));
+		FuzzyRule rule2 = FuzzyRule.of(FuzzyPredicate.of(inVar2), FuzzyInference.of(outVar2));
 		return system.addRule(rule1).addRule(rule2);
 	}
 
-	private Map<String, Double> getInputs1() {
+	private Map<String, Double> createInputs0() {
+		Map<String,Double> inputs = new HashMap<>();
+		inputs.put("input", 0.0);
+		return inputs;
+	}
+
+	private Map<String, Double> createInputs1() {
 		Map<String,Double> inputs = new HashMap<>();
 		inputs.put("input", -1.5);
 		return inputs;
 	}
 
-	private Map<String, Double> getInputs2() {
+	private Map<String, Double> createInputs2() {
 		Map<String,Double> inputs = new HashMap<>();
 		inputs.put("input", +1.5);
 		return inputs;
